@@ -8,13 +8,12 @@ Controller::Controller()
 }
 
 void Controller::handleEvent( bool &running, 
-            std::vector<Building>& buildings, int& clickedBuildingID, std::vector<Button>& buttons, ButtonSprite& clickedButtonSprite ) const
+            std::vector<std::shared_ptr<Building>>& buildings, std::vector<Button>& buttons, ButtonSprite& clickedButtonSprite, std::shared_ptr<Building>& clickedBuilding ) const
 {
   SDL_Event e;
   bool mouseDown = false;
   bool mouseUp = false;
   bool inside = false;
-  int prevBuildingID;
   int x, y;
 
   while( SDL_PollEvent( &e ) )
@@ -26,11 +25,10 @@ void Controller::handleEvent( bool &running,
       // check user interactions with building sprites
       for( int i = 0; i < buildings.size(); i++ )
       {
-        if( buildings[ i ].handleEvent( &e ) ) //if building is clicked, true
+        if( buildings[ i ]->handleEvent( &e ) ) //if building is clicked, true
         {
-          prevBuildingID = clickedBuildingID;
-          clickedBuildingID = buildings[ i ].getID();
-          std::cout << "clicked building ID: " << clickedBuildingID << std::endl;
+          clickedBuilding = buildings[ i ];
+          std::cout << "clicked building ID: " << clickedBuilding->getID() << std::endl;
         }
       }
 

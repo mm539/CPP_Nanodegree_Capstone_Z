@@ -17,7 +17,7 @@ class Renderer
   const std::size_t bottom_panel_height );
   ~Renderer();
 
-  void renderAll( std::vector<Building>& buildings, Overlay& overlay, std::vector<Button>& buttons, Player& player );
+  void renderAll( std::vector<std::shared_ptr<Building>>& buildings, Overlay& overlay, std::vector<Button>& buttons, Player& player );
 
  private:
   SDL_Window* _window;

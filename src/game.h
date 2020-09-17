@@ -40,11 +40,11 @@ class Game
 
   // game state variables
   Player _player;
-  std::vector<Building> _buildings;
+  std::vector<std::shared_ptr<Building>> _buildings;
   std::vector<Button> _buttons;
 
   ButtonSprite _clickedButtonSprite; // the most recently clicked button
-  int _clickedBuildingID; // the id of the currently selected building
+  std::shared_ptr<Building> _clickedBuilding;
   int _time { 6 }; // game time
   int _homeID; // the id of the home building
 

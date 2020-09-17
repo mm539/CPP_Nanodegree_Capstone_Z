@@ -17,7 +17,6 @@ Game::Game(std::size_t screen_width, std::size_t screen_height,
   makeOverlay();
   makeButtons();
   makePlayer();
-  _clickedBuildingID = _homeID;
 }
 
 
@@ -36,7 +35,7 @@ void Game::Run( Controller const &controller,
     frame_start = SDL_GetTicks();
 
     // INPUT, UPDATE, RENDER
-    controller.handleEvent( running, _buildings, _clickedBuildingID, _buttons, _clickedButtonSprite );
+    controller.handleEvent( running, _buildings, _buttons, _clickedButtonSprite, _clickedBuilding );
     update( running );
     renderer.renderAll( _buildings, _overlay, _buttons, _player ); 
 
@@ -65,44 +64,45 @@ void Game::makeBuildings()
     {
       if( ( i * y + j ) == _homeID )
       {
-        _buildings.push_back( 
-        Building( i * y + j,
+        _buildings.emplace_back( 
+        std::shared_ptr<Building> ( new Building( i * y + j,
                   BUILDING_SPRITE_HOME,
                   _gWidth , _gHeight,
                   _leftPanelWidth + j * _gWidth, _topPanelHeight + i * _gHeight,
-                  "../img/buildings-home128.bmp" ) 
+                  "../img/buildings-home128.bmp" ) )
         );
+        _clickedBuilding = _buildings.back();
       }
       else if( ( rand() % 4 ) <= 2 )
       {
         if( ( rand() % 11 ) <= 7 ) 
         {
-          _buildings.push_back( 
-          Building( i * y + j,
+          _buildings.emplace_back( 
+          std::shared_ptr<Building> ( new Building( i * y + j,
                   BUILDING_SPRITE_HOUSE,
                   _gWidth , _gHeight,
                   _leftPanelWidth + j * _gWidth, _topPanelHeight + i * _gHeight,
-                  "../img/buildings-house128.bmp" ) 
+                  "../img/buildings-house128.bmp" ) )
           );
         }
         else if( rand() % 3 <= 1 )
         {
-          _buildings.push_back( 
-          Building( i * y + j,
+          _buildings.emplace_back( 
+          std::shared_ptr<Building> ( new Building( i * y + j,
                   BUILDING_SPRITE_HSTORE,
                   _gWidth , _gHeight,
                   _leftPanelWidth + j * _gWidth, _topPanelHeight + i * _gHeight,
-                  "../img/buildings-hstore128.bmp" ) 
+                  "../img/buildings-hstore128.bmp" ) )
           );
         }
         else
         {
-          _buildings.push_back( 
-          Building( i * y + j,
+          _buildings.emplace_back( 
+          std::shared_ptr<Building> ( new Building( i * y + j,
                   BUILDING_SPRITE_CSTORE,
                   _gWidth , _gHeight,
                   _leftPanelWidth + j * _gWidth, _topPanelHeight + i * _gHeight,
-                  "../img/buildings-cstore128.bmp" ) 
+                  "../img/buildings-cstore128.bmp" ) )
           );
         }
         
@@ -167,16 +167,16 @@ void Game::buttonAction()
 
   case ButtonSprite::BUTTON_SPRITE_GO:
     _actionResultText = std::to_string( _time % 24 ) + " :00 : traveled to a building.";
-    _time = _time + computeTravelTime();
-    _player.setPosition( getBuildingCoord( _clickedBuildingID ).x, getBuildingCoord( _clickedBuildingID ).y );
-    _player.setLocationID( _clickedBuildingID );
+    _time = _time + computeTravelTime();    
+     _player.setPosition( _clickedBuilding->getBuildingCoord().x, _clickedBuilding->getBuildingCoord().y );
+     _player.setLocationID( _clickedBuilding->getID() );
     break;
 
   case ButtonSprite::BUTTON_SPRITE_GO_HOME:
     _actionResultText = std::to_string( _time % 24 ) + " :00 : traveled home.";
     _time = _time + computeTravelTime();
-    _player.setPosition( getBuildingCoord( _clickedBuildingID ).x, getBuildingCoord( _clickedBuildingID ).y );
-    _player.setLocationID( _clickedBuildingID );
+    _player.setPosition( _clickedBuilding->getBuildingCoord().x, _clickedBuilding->getBuildingCoord().y );
+     _player.setLocationID( _clickedBuilding->getID() );
     break;
 // the next three cases use buildingStatus
   case ButtonSprite::BUTTON_SPRITE_SCOUT:
@@ -202,12 +202,12 @@ void Game::buttonAction()
 void Game::updateButtons()
 {
   /* update _buttonState of the buttons in _buttons according to:
-    1. _clickedBuildingID
+    1. _clickedBuilding
     2. _player._locationID
     3. _homeID
-    4. the status of the selected building
   */
   int playerLocationID = _player.getLocationID();
+  int buildingID = _clickedBuilding->getID();
 
   // declare and initialize bools for different cases
   bool atHomeANDclickBuilding = false;
@@ -217,11 +217,11 @@ void Game::updateButtons()
   bool atBuildingANDclickSameBuilding = false;
 
   // set the bools that will determine which buttons are visible
-  if( playerLocationID == _homeID && _clickedBuildingID != _homeID ) atHomeANDclickBuilding = true;
-  else if ( playerLocationID == _homeID && _clickedBuildingID == _homeID ) atHomeANDclickHome = true;
-  else if ( playerLocationID != _homeID && _clickedBuildingID == _homeID ) atBuildingANDclickHome = true;
-  else if ( playerLocationID != _clickedBuildingID ) atBuildingANDclickOtherBuilding = true;
-  else if ( playerLocationID == _clickedBuildingID) atBuildingANDclickSameBuilding = true;
+  if( playerLocationID == _homeID && buildingID != _homeID ) atHomeANDclickBuilding = true;
+  else if ( playerLocationID == _homeID && buildingID == _homeID ) atHomeANDclickHome = true;
+  else if ( playerLocationID != _homeID && buildingID == _homeID ) atBuildingANDclickHome = true;
+  else if ( playerLocationID != buildingID ) atBuildingANDclickOtherBuilding = true;
+  else if ( playerLocationID == buildingID) atBuildingANDclickSameBuilding = true;
 
   // set the buttons to visible, invisible, or unclickable
   std::for_each( _buttons.begin(), _buttons.end(), [
@@ -291,9 +291,9 @@ SDL_Point Game::getBuildingCoord( int id )
 {
   for( int i = 0; i < _buildings.size(); i++ )
   {
-    if( _buildings[ i ].getID() == id )
+    if( _buildings[ i ]->getID() == id )
     {
-      return _buildings[ i ].getBuildingCoord();
+      return _buildings[ i ]->getBuildingCoord();
     }
   }
   return SDL_Point( { 0 , 0 } );
@@ -301,7 +301,7 @@ SDL_Point Game::getBuildingCoord( int id )
 
 int Game::computeTravelTime()
 {
-  SDL_Point buildingCoord = getBuildingCoord( _clickedBuildingID );
+  SDL_Point buildingCoord = _clickedBuilding->getBuildingCoord();
 
   int xDif = abs( _player.getPosition().x - buildingCoord.x );
   int yDif = abs( _player.getPosition().y - buildingCoord.y );

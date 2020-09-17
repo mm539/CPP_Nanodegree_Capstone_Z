@@ -50,7 +50,7 @@ Renderer::~Renderer()
   TTF_Quit();
 }
 
-void Renderer::renderAll( std::vector<Building>& buildings, Overlay& overlay, std::vector<Button>& buttons, Player& player )
+void Renderer::renderAll( std::vector<std::shared_ptr<Building>>& buildings, Overlay& overlay, std::vector<Button>& buttons, Player& player )
 {
   // clear the screen
   SDL_SetRenderDrawColor( _renderer, 0x00, 0x00, 0x00, 0x00 );
@@ -62,7 +62,7 @@ void Renderer::renderAll( std::vector<Building>& buildings, Overlay& overlay, st
   // render buildings on map
   for( int i = 0; i < buildings.size(); i++ )
   {
-    buildings[ i ].render( _renderer );
+    buildings[ i ]->render( _renderer );
   }
 
   // render buttons
