@@ -1,0 +1,1 @@
+This project was created as my capstone project for the Udacity C++ Nanodegree I'm taking. My objective is to create a game.
