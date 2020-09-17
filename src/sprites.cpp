@@ -146,3 +146,45 @@ void Building::update() const
 {
   //overlay->activateButtons( this );
 }
+
+// functions for accessing food, materials, danger level, and scouted
+
+int Building::getFoodAmt()
+{
+  return _food;
+}
+
+int Building::getMaterialsAmt()
+{
+  return _materials;
+}
+
+int Building::getDangerLvl()
+{
+  return _dangerLevel;
+}
+
+int Building::getLastScoutedTime()
+{
+  return _lastScoutedTime;
+}
+
+void Building::changeFoodAmt( int x )
+{
+  _food = _food + x;
+}
+
+void Building::changeMaterialsAmt( int x )
+{
+  _materials = _materials + x;
+}
+
+void Building::changeDangerLvl( int x )
+{
+  _dangerLevel = _dangerLevel + x;
+}
+
+void Building::changeLastScoutedTime( int x )
+{
+  _lastScoutedTime = _lastScoutedTime + x;
+}

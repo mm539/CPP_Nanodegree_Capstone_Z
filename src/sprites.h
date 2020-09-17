@@ -116,7 +116,15 @@ class Building: public Sprite
     int getID();
     
     // functions for accessing food, materials, danger level, and scouted
-    void setScoutStatus();
+    int getFoodAmt();
+    int getMaterialsAmt();
+    int getDangerLvl();
+    int getLastScoutedTime();
+
+    void changeFoodAmt( int x );
+    void changeMaterialsAmt( int x );
+    void changeDangerLvl( int x );
+    void changeLastScoutedTime( int x );
   
   private:
     int _id; // building ID
