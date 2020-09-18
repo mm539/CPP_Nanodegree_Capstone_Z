@@ -163,4 +163,19 @@ void Overlay::render( SDL_Renderer* rend )
   int stringLength = strlen( _texts._actionResultText.c_str() );
   _bottomPanel.loadFromRenderedText( rend, _texts._actionResultText, textColor, _font );
   _bottomPanel.render( rend, { 270, 820 }, stringLength * 15, 40);
+
+  // 5. render building info
+  textColor = { 0xc4, 0x66, 0x66 };
+  _oTextures._buildingScoutedT.loadFromRenderedText( rend, _texts._buildingScoutedText, textColor, _font );
+  _oTextures._buildingScoutedT.render( rend, { 20, 700 }, 180, 40 );
+
+  _oTextures._buildingDangerT.loadFromRenderedText( rend, _texts._buildingDangerText, textColor, _font );
+  _oTextures._buildingDangerT.render( rend, { 20, 760 }, 180, 40 );
+
+  _oTextures._buildingFoodT.loadFromRenderedText( rend, _texts._buildingFoodText, textColor, _font );
+  _oTextures._buildingFoodT.render( rend, { 20, 800 }, 180, 40 );
+
+  _oTextures._buildingMaterialsT.loadFromRenderedText( rend, _texts._buildingMaterialsText, textColor, _font );
+  _oTextures._buildingMaterialsT.render( rend, { 20, 840 }, 180, 40 );
+
 }

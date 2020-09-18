@@ -46,6 +46,11 @@ struct OTextures // overlay textures
   LTexture _homeHealthT;
   LTexture _homeFoodT;
   LTexture _homeMaterialsT;
+
+  LTexture _buildingFoodT;
+  LTexture _buildingMaterialsT;
+  LTexture _buildingScoutedT;
+  LTexture _buildingDangerT;
 };
 
 struct OverlayTexts
@@ -60,6 +65,11 @@ struct OverlayTexts
   std::string _homeHealthText;
   std::string _homeFoodText;
   std::string _homeMaterialsText;
+
+  std::string _buildingFoodText;
+  std::string _buildingMaterialsText;
+  std::string _buildingScoutedText;
+  std::string _buildingDangerText;
 
   // bottom panel
   std::string _actionResultText;

@@ -283,6 +283,12 @@ void Game::updateOverlay()
   _overlay._texts._homeFoodText = "Food : " + std::to_string( _player.getHomeFood() );
   _overlay._texts._homeMaterialsText = "Materials : " + std::to_string( _player.getHomeMaterials() );
 
+  // selected building stats
+  _overlay._texts._buildingDangerText = "Danger : " + std::to_string( _clickedBuilding->getDangerLvl() );
+  _overlay._texts._buildingScoutedText = "Recently Scouted? : " + std::to_string( _clickedBuilding->getLastScoutedTime() );
+  _overlay._texts._buildingFoodText = "Food : " + std::to_string( _clickedBuilding->getFoodAmt() );
+  _overlay._texts._buildingMaterialsText = "Materials : " + std::to_string( _clickedBuilding->getMaterialsAmt() );
+
   //  bottom panel display text
   _overlay._texts._actionResultText = _actionResultText;
 }
