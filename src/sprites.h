@@ -107,7 +107,11 @@ class Building: public Sprite
   public:
     // Constructors
     Building(){}
-    Building( int id, BuildingSprite sprite, int width, int height, int xpos, int ypos, std::string _imgPath );
+    Building( int id, BuildingSprite sprite,
+              int width, int height, 
+              int xpos, int ypos,
+              std::string _imgPath,
+              int food, int materials, int dangerLevel );
 
     void update() const;
     void render( SDL_Renderer* rend );

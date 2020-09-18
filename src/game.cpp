@@ -69,7 +69,7 @@ void Game::makeBuildings()
                   BUILDING_SPRITE_HOME,
                   _gWidth , _gHeight,
                   _leftPanelWidth + j * _gWidth, _topPanelHeight + i * _gHeight,
-                  "../img/buildings-home128.bmp" ) )
+                  "../img/buildings-home128.bmp", 0, 0, 0) )  // int food, int materials, int dangerLevel
         );
         _clickedBuilding = _buildings.back();
       }
@@ -82,7 +82,8 @@ void Game::makeBuildings()
                   BUILDING_SPRITE_HOUSE,
                   _gWidth , _gHeight,
                   _leftPanelWidth + j * _gWidth, _topPanelHeight + i * _gHeight,
-                  "../img/buildings-house128.bmp" ) )
+                  "../img/buildings-house128.bmp",
+                  10 + rand() % 6, 10 + rand() % 6, 15 + rand() % 10 ) ) // int food, int materials, int dangerLevel
           );
         }
         else if( rand() % 3 <= 1 )
@@ -92,7 +93,8 @@ void Game::makeBuildings()
                   BUILDING_SPRITE_HSTORE,
                   _gWidth , _gHeight,
                   _leftPanelWidth + j * _gWidth, _topPanelHeight + i * _gHeight,
-                  "../img/buildings-hstore128.bmp" ) )
+                  "../img/buildings-hstore128.bmp",
+                  0, 15 + rand() % 30, 20 + rand() % 10 ) )
           );
         }
         else
@@ -102,7 +104,8 @@ void Game::makeBuildings()
                   BUILDING_SPRITE_CSTORE,
                   _gWidth , _gHeight,
                   _leftPanelWidth + j * _gWidth, _topPanelHeight + i * _gHeight,
-                  "../img/buildings-cstore128.bmp" ) )
+                  "../img/buildings-cstore128.bmp",
+                  15 + rand() % 30, 0, 20 + rand() % 10 ) )
           );
         }
         
@@ -180,7 +183,9 @@ void Game::buttonAction()
     break;
 // the next three cases use buildingStatus
   case ButtonSprite::BUTTON_SPRITE_SCOUT:
+    _actionResultText = std::to_string( _time % 24 ) + " :00 : scouted.";
     _time = _time + 1;
+    _clickedBuilding->changeScouted( true );
     break;
 
   case ButtonSprite::BUTTON_SPRITE_CLEAR:

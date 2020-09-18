@@ -105,7 +105,8 @@ BUILDING
 Building::Building( int id, BuildingSprite sprite, 
                     int width, int height, 
                     int xpos, int ypos,
-                    std::string imgPath )
+                    std::string imgPath,
+                    int food, int materials, int dangerLevel )
 : _id( id )
 {
   _width = width;
@@ -117,6 +118,9 @@ Building::Building( int id, BuildingSprite sprite,
   _imgPath = imgPath;
   _mouseState = STATE_MOUSE_OUT;
   _scouted = false;
+  _food = food;
+  _materials = materials;
+  _dangerLevel = dangerLevel;
 }
 
 int Building::getID()
