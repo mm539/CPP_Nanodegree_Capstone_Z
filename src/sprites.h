@@ -119,12 +119,17 @@ class Building: public Sprite
     int getFoodAmt();
     int getMaterialsAmt();
     int getDangerLvl();
-    int getLastScoutedTime();
+    bool getScouted();
 
     void changeFoodAmt( int x );
     void changeMaterialsAmt( int x );
     void changeDangerLvl( int x );
-    void changeLastScoutedTime( int x );
+    void changeScouted( bool x );
+
+    std::string getFoodText();
+    std::string getMaterialsText();
+    std::string getDangerText();
+    std::string getScoutedText();
   
   private:
     int _id; // building ID
@@ -134,7 +139,7 @@ class Building: public Sprite
     int _food;
     int _materials;
     int _dangerLevel;
-    int _lastScoutedTime;
+    bool _scouted;
 };
 
 

@@ -116,6 +116,7 @@ Building::Building( int id, BuildingSprite sprite,
   _sprite = sprite;
   _imgPath = imgPath;
   _mouseState = STATE_MOUSE_OUT;
+  _scouted = false;
 }
 
 int Building::getID()
@@ -164,9 +165,9 @@ int Building::getDangerLvl()
   return _dangerLevel;
 }
 
-int Building::getLastScoutedTime()
+bool Building::getScouted()
 {
-  return _lastScoutedTime;
+  return _scouted;
 }
 
 void Building::changeFoodAmt( int x )
@@ -184,7 +185,43 @@ void Building::changeDangerLvl( int x )
   _dangerLevel = _dangerLevel + x;
 }
 
-void Building::changeLastScoutedTime( int x )
+void Building::changeScouted( bool x )
 {
-  _lastScoutedTime = _lastScoutedTime + x;
+  _scouted = x;
+}
+
+std::string Building::getFoodText()
+{
+  if( getScouted() )
+  {
+    return std::to_string( getFoodAmt() );
+  }
+  return "unknown";
+}
+
+std::string Building::getMaterialsText()
+{
+  if( getScouted() )
+  {
+    return std::to_string( getMaterialsAmt() );
+  }
+  return "unknown";
+}
+
+std::string Building::getDangerText()
+{
+  if( getScouted() )
+  {
+    return std::to_string( getDangerLvl() );
+  }
+  return "unknown";
+}
+
+std::string Building::getScoutedText()
+{
+  if( getScouted() )
+  {
+    return "Yes";
+  }
+  return "No";
 }
