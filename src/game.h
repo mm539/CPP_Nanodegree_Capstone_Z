@@ -34,6 +34,8 @@ class Game
   void buttonAction();
   void updateButtons();
   void updateOverlay();
+  void clearBuilding();
+  void scavengeBuilding();
   int computeTravelTime();
 
   SDL_Point getBuildingCoord( int id );

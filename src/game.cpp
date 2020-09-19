@@ -189,10 +189,14 @@ void Game::buttonAction()
     break;
 
   case ButtonSprite::BUTTON_SPRITE_CLEAR:
+    clearBuilding();
+    _actionResultText = std::to_string( _time % 24 ) + " :00 : cleared some Zs, - " + "PH PH " +" health; danger level reduced by " + "DL PH";
     _time = _time + 1;
     break;
 
   case ButtonSprite::BUTTON_SPRITE_SCAVENGE:
+    scavengeBuilding();
+    _actionResultText = std::to_string( _time % 24 ) + " :00 : scavenged.";
     _time = _time + 1;
     break;
 
@@ -321,4 +325,82 @@ int Game::computeTravelTime()
   return xDif > yDif ? xDif / _gWidth : yDif / _gHeight;
 }
 
+void Game::clearBuilding()
+{
+  // _clickedBuilding, _player
+  int dmgToPlayer = -(5 + ( rand() % 5 ) * 2);
+  int dmgToZs = -(5 + ( rand() % 5 ) * 2);
+  _player.changePlayerHealth( dmgToPlayer );
+  _clickedBuilding->changeDangerLvl( dmgToZs );
+  if( _clickedBuilding->getDangerLvl() < 0 )
+  {
+    int zero = -( _clickedBuilding->getDangerLvl() );
+    _clickedBuilding->changeDangerLvl( zero );
+  }
+}
 
+void Game::scavengeBuilding()
+{
+  int buildingFood = _clickedBuilding->getFoodAmt();
+  int buildingMat = _clickedBuilding->getMaterialsAmt();
+
+  bool caseFM = ( buildingFood > 0 ) && ( buildingMat > 0 );
+  bool caseF = ( buildingFood > 0 ) && ( buildingMat == 0 );
+  bool caseM = ( buildingFood == 0 ) && ( buildingMat >= 0 );
+
+  if( caseFM )
+  {
+    if( buildingFood >= 5 )
+    {
+      _player.changePlayerFood( 5 );
+      _clickedBuilding->changeFoodAmt( -5 );
+    }
+    else // 
+    {
+      _player.changePlayerFood( _clickedBuilding->getFoodAmt() );
+      _clickedBuilding->changeFoodAmt( -_clickedBuilding->getFoodAmt() );
+    }
+    
+    if( buildingMat >= 5 )
+    {
+      _player.changePlayerMaterials( 5 );
+      _clickedBuilding->changeMaterialsAmt( -5 );
+    }
+    else // 
+    {
+      _player.changePlayerMaterials( _clickedBuilding->getMaterialsAmt() );
+      _clickedBuilding->changeMaterialsAmt( -_clickedBuilding->getMaterialsAmt() );
+    }
+  }
+  else if( caseF )
+  {
+    if( buildingFood >= 10 )
+    {
+      _player.changePlayerFood( 10 );
+      _clickedBuilding->changeFoodAmt( -10 );
+    }
+    else 
+    {
+      _player.changePlayerFood( _clickedBuilding->getFoodAmt() );
+      _clickedBuilding->changeFoodAmt( -_clickedBuilding->getFoodAmt() );
+    }
+  }
+  else if( caseM )
+  {
+    if( buildingMat >= 10 )
+    {
+      _player.changePlayerMaterials( 10 );
+      _clickedBuilding->changeMaterialsAmt( -10 );
+    }
+    else 
+    {
+      _player.changePlayerMaterials( _clickedBuilding->getMaterialsAmt() );
+      _clickedBuilding->changeMaterialsAmt( -_clickedBuilding->getMaterialsAmt() );
+    }
+  }
+
+  if( _clickedBuilding->getDangerLvl() > 0 )
+  {
+    _player.changePlayerHealth( -( 10 + rand() % 3 ) );
+  }
+}
