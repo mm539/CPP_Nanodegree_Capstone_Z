@@ -74,6 +74,10 @@ Button::Button( ButtonSprite sprite, int width, int height, std::string imgPath 
 void Button::render(SDL_Renderer* rend)
 {
   _LTexture.loadTextureFromBMP( rend, _imgPath );
+  if( _buttonState == ButtonState::BUTTON_UNCLICKABLE )
+  {
+    _LTexture.setColor( 0x7f, 0x7f, 0x7f );
+  }
   _LTexture.render( rend , _position, _width, _height );
   // std::cout << "rendered building #: " << _id << std::endl;
 }

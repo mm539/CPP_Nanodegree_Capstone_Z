@@ -225,6 +225,11 @@ void Game::updateButtons()
   bool atBuildingANDclickOtherBuilding = false;
   bool atBuildingANDclickSameBuilding = false;
 
+  bool scouted = _clickedBuilding->getScouted();
+  int foodAmt = _clickedBuilding->getFoodAmt();
+  int matAmt = _clickedBuilding->getMaterialsAmt();
+  int dangerLvl = _clickedBuilding->getDangerLvl();
+
   // set the bools that will determine which buttons are visible
   if( playerLocationID == _homeID && buildingID != _homeID ) atHomeANDclickBuilding = true;
   else if ( playerLocationID == _homeID && buildingID == _homeID ) atHomeANDclickHome = true;
@@ -238,7 +243,8 @@ void Game::updateButtons()
     &atHomeANDclickHome,
     &atBuildingANDclickHome,
     &atBuildingANDclickOtherBuilding,
-    &atBuildingANDclickSameBuilding
+    &atBuildingANDclickSameBuilding,
+    &scouted, &foodAmt, &matAmt, &dangerLvl
   ]( Button& b )
   {
     if( atHomeANDclickBuilding )
@@ -267,7 +273,10 @@ void Game::updateButtons()
     }
     else if( atBuildingANDclickSameBuilding )
     {
-      if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_SCOUT ||
+      if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_SCOUT && scouted ) b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );
+      else if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_SCAVENGE && foodAmt == 0 && matAmt == 0 ) b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );
+      else if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_CLEAR && dangerLvl == 0 ) b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );      
+      else if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_SCOUT ||
           b.getSprite() == ButtonSprite::BUTTON_SPRITE_SCAVENGE ||
           b.getSprite() == ButtonSprite::BUTTON_SPRITE_CLEAR ) 
       b.setButtonState( ButtonState::BUTTON_VISIBLE );
