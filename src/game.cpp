@@ -157,7 +157,18 @@ void Game::update( bool& running )
     _player.changePlayerMaterials( -_player.getPlayerMaterials() );
   }
 
-  // if time is midnight, return player home and initiate a zombie attack, then set time to 6:00am
+  // if time is 5:00am, consume some food. if not enought food, then take dmg. set time to 6:00am
+  if( (_time % 24 ) == 5 )
+  {
+    if( _player.getHomeFood() > 10 )
+    {
+      _player.changeHomeFood( -10 );
+    }
+    else _player.changePlayerHealth( -20 );
+    _time = _time + 1;
+  }
+
+  // if time is midnight, return player home and initiate a zombie attack, then set time to 5:00am
   if( ( _time % 24 ) == 0 )
   {
     SDL_Point pos = getBuildingCoord( _homeID );
@@ -165,7 +176,7 @@ void Game::update( bool& running )
     _player.setPosition( pos.x, pos.y );
     _player.changeHomeHealth( -( 5 + rand() % 25 ) );
     _actionResultText = "6:00 : returned home. zombies attacked.";
-    _time = _time + 6;
+    _time = _time + 5;
   }
 
   // check if player has won or lost the game
@@ -212,7 +223,7 @@ void Game::buttonAction()
 
   case ButtonSprite::BUTTON_SPRITE_CLEAR:
     clearBuilding();
-    _actionResultText = std::to_string( _time % 24 ) + " :00 : cleared some Zs, - " + "PH PH " +" health; danger level reduced by " + "DL PH";
+    _actionResultText = std::to_string( _time % 24 ) + " :00 : cleared some Zs";
     _time = _time + 1;
     break;
 
@@ -324,8 +335,8 @@ void Game::updateOverlay()
 
   // player stats
   _overlay._texts._playerHealthText = "Health : " + std::to_string( _player.getPlayerHealth() ) + " / 100" ;
-  _overlay._texts._playerFoodText = "Food: " + std::to_string( _player.getPlayerFood() ) + " / xx";
-  _overlay._texts._playerMaterialsText = "Materials : " + std::to_string( _player.getPlayerMaterials() ) + " / xx";
+  _overlay._texts._playerFoodText = "Food: " + std::to_string( _player.getPlayerFood() );
+  _overlay._texts._playerMaterialsText = "Materials : " + std::to_string( _player.getPlayerMaterials() );
 
   // base stats
   _overlay._texts._homeHealthText = "Defenses : " + std::to_string( _player.getHomeHealth() ) + " / 100";
@@ -333,10 +344,20 @@ void Game::updateOverlay()
   _overlay._texts._homeMaterialsText = "Materials : " + std::to_string( _player.getHomeMaterials() );
 
   // selected building stats
-  _overlay._texts._buildingDangerText = "Danger : " +  _clickedBuilding->getDangerText();
-  _overlay._texts._buildingScoutedText = "Scouted : " + _clickedBuilding->getScoutedText();
-  _overlay._texts._buildingFoodText = "Food : " +  _clickedBuilding->getFoodText();
-  _overlay._texts._buildingMaterialsText = "Materials : " +  _clickedBuilding->getMaterialsText();
+  if( _player.getLocationID() == _homeID )
+  {
+    _overlay._texts._buildingDangerText = " ";
+    _overlay._texts._buildingScoutedText = " ";
+    _overlay._texts._buildingFoodText = " ";
+    _overlay._texts._buildingMaterialsText = " ";
+  }
+  else
+  {
+    _overlay._texts._buildingDangerText = "Danger : " +  _clickedBuilding->getDangerText();
+    _overlay._texts._buildingScoutedText = "Scouted : " + _clickedBuilding->getScoutedText();
+    _overlay._texts._buildingFoodText = "Food : " +  _clickedBuilding->getFoodText();
+    _overlay._texts._buildingMaterialsText = "Materials : " +  _clickedBuilding->getMaterialsText();
+  }
 
   //  bottom panel display text
   _overlay._texts._actionResultText = _actionResultText;
