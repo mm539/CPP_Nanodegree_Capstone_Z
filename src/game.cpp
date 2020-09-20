@@ -17,6 +17,7 @@ Game::Game(std::size_t screen_width, std::size_t screen_height,
   makeOverlay();
   makeButtons();
   makePlayer();
+  _winTime = 24 * 4 + 24 * ( rand() % 3 ) + 9;
 }
 
 
@@ -149,6 +150,7 @@ void Game::update( bool& running )
 
   // check if player has won or lost the game
   if( _player.getPlayerHealth() <= 0 || _player.getHomeHealth() <= 0 ) running = false;
+  else if ( _time >= _winTime ) running = false;
 }
 
 void Game::buttonAction()
@@ -321,6 +323,11 @@ SDL_Point Game::getBuildingCoord( int id )
     }
   }
   return SDL_Point( { 0 , 0 } );
+}
+
+Player Game::getPlayer()
+{
+  return _player;
 }
 
 int Game::computeTravelTime()

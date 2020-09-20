@@ -22,6 +22,8 @@ class Game
   void Run( Controller const &controller,
             Renderer &renderer,
             std::size_t target_frame_duration );
+  Player getPlayer();
+
  private:
   // constructor functions
   void makeBuildings();
@@ -47,7 +49,8 @@ class Game
 
   ButtonSprite _clickedButtonSprite; // the most recently clicked button
   std::shared_ptr<Building> _clickedBuilding;
-  int _time { 6 }; // game time
+  int _time { 6 }; // game time. hours.
+  int _winTime; // how many hours a player must survive to win the game.
   int _homeID; // the id of the home building
 
   // display information

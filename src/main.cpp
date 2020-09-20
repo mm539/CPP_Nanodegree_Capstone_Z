@@ -27,5 +27,18 @@ int main()
              kBOTTOM_PANEL_HEIGHT );
   game.Run( controller, renderer, kMsPerFrame );
 
+  if ( game.getPlayer().getPlayerHealth() > 0 && game.getPlayer().getHomeHealth() > 0 )
+  {
+    std::cout << "You hear the sound of gunfire quickly approaching your location. As quickly as you can, you use your shirt and a long branch on the ground nearby to make a white flag to wave in the air. In the distance you hear faint shouts of what sounds like \"We've got another survivor! We've got another survivor!\" Soon, the soldiers make it to your location and beckon you onto a truck with what appears to be more survivors.\n  Congratulations! You survived!\n";
+  }
+  else if ( game.getPlayer().getPlayerHealth() <= 0 )
+  {
+    std::cout << "You've died! Better luck next time!\n";
+  }
+  else
+  {
+    std::cout << "Your base has been overun! Better luck next time!\n";
+  }
+  
   std::cout << "Game has terminated successfully!\n";
 }
