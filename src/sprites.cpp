@@ -39,8 +39,6 @@ bool Sprite::handleEvent( SDL_Event* e )
       {
         _mousedDown = false;
         _mouseState = STATE_MOUSE_OVER;
-        /*std::cout << "clicked!\n";
-        std::cout << _imgPath << std::endl;*/
         return true;
       }
       break;
@@ -79,7 +77,6 @@ void Button::render(SDL_Renderer* rend)
     _LTexture.setColor( 0x7f, 0x7f, 0x7f );
   }
   _LTexture.render( rend , _position, _width, _height );
-  // std::cout << "rendered building #: " << _id << std::endl;
 }
 
 ButtonSprite Button::getSprite()
@@ -95,11 +92,6 @@ ButtonState Button::getButtonState()
 void Button::setButtonState( ButtonState buttonState )
 {
   _buttonState = buttonState;
-}
-
-void Button::update( ) const
-{
-  //
 }
 
 /*
@@ -138,22 +130,8 @@ SDL_Point Building::getBuildingCoord()
 }
 void Building::render(SDL_Renderer* rend)
 {
-  /* TODO: hover effects
-  if( _mouseState == STATE_MOUSE_OUT ) path = "../img/house128.bmp";
-  else if( _mouseState == STATE_MOUSE_OVER ) path = "../img/z128.bmp";
-  else if( _mouseState == STATE_MOUSE_DOWN ) path = "../img/z128red.bmp";
-  else if( _mouseState == STATE_MOUSE_UP ) path = "../img/z128blue.bmp";
-  */
-  
-
   _LTexture.loadTextureFromBMP( rend, _imgPath );
   _LTexture.render( rend , _position, _width, _height );
-  // std::cout << "rendered building #: " << _id << std::endl;
-}
-
-void Building::update() const
-{
-  //overlay->activateButtons( this );
 }
 
 // functions for accessing food, materials, danger level, and scouted

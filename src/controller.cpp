@@ -28,7 +28,6 @@ void Controller::handleEvent( bool &running,
         if( buildings[ i ]->handleEvent( &e ) ) //if building is clicked, true
         {
           clickedBuilding = buildings[ i ];
-          std::cout << "clicked building ID: " << clickedBuilding->getID() << std::endl;
         }
       }
 
@@ -38,7 +37,6 @@ void Controller::handleEvent( bool &running,
         if( buttons[ j ].handleEvent( &e ) && buttons[ j ].getButtonState() == ButtonState::BUTTON_VISIBLE) //if button is clicked && button is visible, true
         {
           clickedButtonSprite = buttons[ j ].getSprite();
-          std::cout << "clicked button sprite: " << clickedButtonSprite << std::endl;
         }
       }
     }

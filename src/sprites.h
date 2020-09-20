@@ -68,8 +68,6 @@ class Sprite
 
     bool handleEvent( SDL_Event* e );
     void render(SDL_Renderer* rend);
-    virtual void update() const = 0; // pure virtual function.
-
     CSMouseState getMouseState();
     void setPosition( int x, int y );
 
@@ -89,7 +87,6 @@ class Button: public Sprite
     Button( ButtonSprite sprite, int width, int height, std::string imgPath );
 
     void render( SDL_Renderer* rend );
-    void update() const;
 
     ButtonSprite getSprite();
     ButtonState getButtonState();
@@ -113,7 +110,6 @@ class Building: public Sprite
               std::string _imgPath,
               int food, int materials, int dangerLevel );
 
-    void update() const;
     void render( SDL_Renderer* rend );
 
     SDL_Point getBuildingCoord();
