@@ -251,6 +251,8 @@ void Game::updateButtons()
   int foodAmt = _clickedBuilding->getFoodAmt();
   int matAmt = _clickedBuilding->getMaterialsAmt();
   int dangerLvl = _clickedBuilding->getDangerLvl();
+  int playerHealth = _player.getPlayerHealth();
+  int homeHealth = _player.getHomeHealth();
 
   // set the bools that will determine which buttons are visible
   if( playerLocationID == _homeID && buildingID != _homeID ) atHomeANDclickBuilding = true;
@@ -266,7 +268,7 @@ void Game::updateButtons()
     &atBuildingANDclickHome,
     &atBuildingANDclickOtherBuilding,
     &atBuildingANDclickSameBuilding,
-    &scouted, &foodAmt, &matAmt, &dangerLvl
+    &scouted, &foodAmt, &matAmt, &dangerLvl, &playerHealth, &homeHealth
   ]( Button& b )
   {
     if( atHomeANDclickBuilding )
@@ -276,9 +278,16 @@ void Game::updateButtons()
     }
     else if( atHomeANDclickHome )
     {
-      if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_REST || 
-      b.getSprite() == ButtonSprite::BUTTON_SPRITE_REPAIR ) 
-      b.setButtonState( ButtonState::BUTTON_VISIBLE );
+      if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_REST )
+      {
+        if( playerHealth < 100) b.setButtonState( ButtonState::BUTTON_VISIBLE );
+        else b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );
+      }
+      else if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_REPAIR )
+      {
+        if( homeHealth < 100) b.setButtonState( ButtonState::BUTTON_VISIBLE );
+        else b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );
+      }
       else b.setButtonState( ButtonState::BUTTON_INVISIBLE );
     }
     else if( atBuildingANDclickHome )
