@@ -147,6 +147,26 @@ void Game::update( bool& running )
   buttonAction(); // performs the action set in _clickedButtonSprite
   updateOverlay();
  
+  // if player is at home and has supplies, transfer those materials to the base
+  if( ( _player.getPlayerFood() > 0 || _player.getPlayerMaterials() > 0 ) && _player.getLocationID() == _homeID )
+  {
+    _player.changeHomeFood( _player.getPlayerFood() );
+    _player.changeHomeMaterials( _player.getPlayerMaterials() );
+
+    _player.changePlayerFood( -_player.getPlayerFood() );
+    _player.changePlayerMaterials( -_player.getPlayerMaterials() );
+  }
+
+  // if time is midnight, return player home and initiate a zombie attack, then set time to 6:00am
+  if( ( _time % 24 ) == 0 )
+  {
+    SDL_Point pos = getBuildingCoord( _homeID );
+    _player.setLocationID( _homeID );
+    _player.setPosition( pos.x, pos.y );
+    _player.changeHomeHealth( -( 5 + rand() % 25 ) );
+    _actionResultText = "6:00 : returned home. zombies attacked.";
+    _time = _time + 6;
+  }
 
   // check if player has won or lost the game
   if( _player.getPlayerHealth() <= 0 || _player.getHomeHealth() <= 0 ) running = false;
@@ -305,7 +325,7 @@ void Game::updateOverlay()
 
   // selected building stats
   _overlay._texts._buildingDangerText = "Danger : " +  _clickedBuilding->getDangerText();
-  _overlay._texts._buildingScoutedText = "Recently Scouted? : " + _clickedBuilding->getScoutedText();
+  _overlay._texts._buildingScoutedText = "Scouted : " + _clickedBuilding->getScoutedText();
   _overlay._texts._buildingFoodText = "Food : " +  _clickedBuilding->getFoodText();
   _overlay._texts._buildingMaterialsText = "Materials : " +  _clickedBuilding->getMaterialsText();
 

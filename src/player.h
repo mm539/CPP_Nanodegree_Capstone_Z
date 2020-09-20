@@ -12,6 +12,7 @@ class Player
   // rendering
   void render( SDL_Renderer* rend );
 
+ // general utility functions
   int getLocationID();
   SDL_Point getPosition();
 
