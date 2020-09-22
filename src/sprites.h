@@ -115,16 +115,18 @@ class Building: public Sprite
     SDL_Point getBuildingCoord();
     int getID();
     
-    // functions for accessing food, materials, danger level, and scouted
+    // functions for accessing food, materials, danger level, scouted, selected
     int getFoodAmt();
     int getMaterialsAmt();
     int getDangerLvl();
     bool getScouted();
+    bool getSelected();
 
     void changeFoodAmt( int x );
     void changeMaterialsAmt( int x );
     void changeDangerLvl( int x );
     void changeScouted( bool x );
+    void changeSelected( bool x );
 
     std::string getFoodText();
     std::string getMaterialsText();
@@ -140,6 +142,7 @@ class Building: public Sprite
     int _materials;
     int _dangerLevel;
     bool _scouted;
+    bool _selected;
 };
 
 

@@ -27,7 +27,9 @@ void Controller::handleEvent( bool &running,
       {
         if( buildings[ i ]->handleEvent( &e ) ) //if building is clicked, true
         {
+          clickedBuilding->changeSelected( false );
           clickedBuilding = buildings[ i ];
+          clickedBuilding->changeSelected( true );
         }
       }
 

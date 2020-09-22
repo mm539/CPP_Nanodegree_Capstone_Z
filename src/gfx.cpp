@@ -101,6 +101,13 @@ void LTexture::renderRect( SDL_Renderer* rend, SDL_Point pos, int width, int hei
   SDL_RenderFillRect( rend, &fillRect );
 }
 
+void LTexture::renderRectOutline( SDL_Renderer* rend, SDL_Point pos, int width, int height )
+{
+  SDL_Rect outlineRect = { pos.x, pos.y, width, height };
+  SDL_SetRenderDrawColor( rend, 0xae, 0x31, 0xd4 ,0xFF ); //#ae31d4
+  SDL_RenderDrawRect( rend, &outlineRect );
+}
+
 int LTexture::getWidth()
 {
 	return _width;

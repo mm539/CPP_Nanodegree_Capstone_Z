@@ -21,6 +21,7 @@ class LTexture
   void setAlpha( Uint8 alpha );
   void render( SDL_Renderer* rend, SDL_Point pos, int width, int height );
   void renderRect( SDL_Renderer* rend, SDL_Point pos, int width, int height );
+  void renderRectOutline( SDL_Renderer* rend, SDL_Point pos, int width, int height );
   int getWidth();
   int getHeight();
 

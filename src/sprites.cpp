@@ -132,6 +132,10 @@ void Building::render(SDL_Renderer* rend)
 {
   _LTexture.loadTextureFromBMP( rend, _imgPath );
   _LTexture.render( rend , _position, _width, _height );
+  if( _selected == true )
+  {
+    _LTexture.renderRectOutline( rend, _position, _width, _height );
+  }
 }
 
 // functions for accessing food, materials, danger level, and scouted
@@ -156,6 +160,11 @@ bool Building::getScouted()
   return _scouted;
 }
 
+bool Building::getSelected()
+{
+  return _selected;
+}
+
 void Building::changeFoodAmt( int x )
 {
   _food = _food + x;
@@ -174,6 +183,11 @@ void Building::changeDangerLvl( int x )
 void Building::changeScouted( bool x )
 {
   _scouted = x;
+}
+
+void Building::changeSelected( bool x )
+{
+  _selected = x;
 }
 
 std::string Building::getFoodText()
