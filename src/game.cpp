@@ -229,10 +229,18 @@ void Game::buttonAction()
     break;
 
   case ButtonSprite::BUTTON_SPRITE_GO:
-    _actionResultText = std::to_string( _time % 24 ) + " :00 : traveled to a building.";
-    _time = _time + computeTravelTime();    
+    if( computeTravelTime() + _time % 24 <= 24 && ( computeTravelTime() + _time ) / 24 == _time / 24 )
+     {
+       _actionResultText = std::to_string( _time % 24 ) + " :00 : traveled to a building.";
+       _time = _time + computeTravelTime();    
      _player.setPosition( _clickedBuilding->getBuildingCoord().x, _clickedBuilding->getBuildingCoord().y );
      _player.setLocationID( _clickedBuilding->getID() );
+     }
+     else
+     {
+       _actionResultText = std::to_string( _time % 24 ) + " :00 : Didn't go. Location is too far.";
+     }
+     
     break;
 
   case ButtonSprite::BUTTON_SPRITE_GO_HOME:
