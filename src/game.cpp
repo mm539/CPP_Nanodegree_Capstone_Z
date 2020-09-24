@@ -46,7 +46,34 @@ void Game::Run( Controller const &controller,
     frame_duration = frame_end - frame_start;
 
     if( frame_duration < target_frame_duration ) SDL_Delay( target_frame_duration - frame_duration );
+
+    if( !running )
+      endGame();
   }
+
+}
+
+void Game::endGame()
+{
+  if ( _player.getPlayerHealth() > 0 && _player.getHomeHealth() > 0 && _time >= _winTime )
+  {
+    std::cout << "You hear the sound of gunfire quickly approaching your location. As quickly as you can, you use your shirt and a long branch on the ground nearby to make a white flag to wave in the air. In the distance you hear faint shouts of what sounds like \"We've got another survivor! We've got another survivor!\" Soon, the soldiers make it to your location and beckon you onto a truck with what appears to be more survivors.\n  Congratulations! You survived!\n";
+  }
+  else if ( _player.getPlayerHealth() <= 0 )
+  {
+    std::cout << "You've died! Better luck next time!\n";
+  }
+  else if ( _player.getHomeHealth() <= 0 )
+  {
+    std::cout << "Your base has been overun! Better luck next time!\n";
+  }
+  else
+  {
+    std::cout << "You've quit the game.\n";
+  }
+  
+  
+  std::cout << "Game has terminated successfully!\n";
 }
 
 void Game::makeBuildings()
@@ -373,11 +400,6 @@ SDL_Point Game::getBuildingCoord( int id )
     }
   }
   return SDL_Point( { 0 , 0 } );
-}
-
-Player Game::getPlayer()
-{
-  return _player;
 }
 
 int Game::computeTravelTime()

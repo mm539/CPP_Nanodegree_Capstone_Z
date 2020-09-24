@@ -22,7 +22,6 @@ class Game
   void Run( Controller const &controller,
             Renderer &renderer,
             std::size_t target_frame_duration );
-  Player getPlayer();
 
  private:
   // constructor functions
@@ -32,6 +31,7 @@ class Game
   void makePlayer();
 
   // functions used to update the game state variables
+  void endGame();
   void update( bool& running );
   void buttonAction();
   void updateButtons();
