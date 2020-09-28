@@ -23,21 +23,21 @@ Game::Game(std::size_t screen_width, std::size_t screen_height,
 
 void Game::Run( Controller const &controller,
                 Renderer &renderer,
-                std::size_t target_frame_duration )
+                std::size_t target_frame_duration,
+                Status &status )
 {
   Uint32 frame_start;
   Uint32 frame_end;
   Uint32 frame_duration;
   // int frame_count = 0; // yet to be implemented feature for FPS calculation
-  bool running = true;
 
-  while( running )
+  while( status.running && status.gameScreen )
   {
     frame_start = SDL_GetTicks();
 
     // INPUT, UPDATE, RENDER
-    controller.handleEvent( running, _buildings, _buttons, _clickedButtonSprite, _clickedBuilding );
-    update( running );
+    controller.handleEvent( status.running, _buildings, _buttons, _clickedButtonSprite, _clickedBuilding );
+    update( status );
     renderer.renderAll( _buildings, _overlay, _buttons, _player ); 
 
     frame_end = SDL_GetTicks();
@@ -47,8 +47,10 @@ void Game::Run( Controller const &controller,
 
     if( frame_duration < target_frame_duration ) SDL_Delay( target_frame_duration - frame_duration );
 
-    if( !running )
+    if( !status.gameScreen )
+    {
       endGame();
+    }
   }
 
 }
@@ -71,9 +73,6 @@ void Game::endGame()
   {
     std::cout << "You've quit the game.\n";
   }
-  
-  
-  std::cout << "Game has terminated successfully!\n";
 }
 
 void Game::makeBuildings()
@@ -168,7 +167,7 @@ void Game::makePlayer()
   _player.setLocationID( _homeID );
 }
 
-void Game::update( bool& running )
+void Game::update( Status &status )
 {
   updateButtons(); // sets which buttons are visible, invisible, clickable according to 1. location of player 2. building clicked on
   buttonAction(); // performs the action set in _clickedButtonSprite
@@ -206,9 +205,12 @@ void Game::update( bool& running )
     _time = _time + 5;
   }
 
-  // check if player has won or lost the game
-  if( _player.getPlayerHealth() <= 0 || _player.getHomeHealth() <= 0 ) running = false;
-  else if ( _time >= _winTime ) running = false;
+  // check if player has finished the game
+  if( _player.getPlayerHealth() <= 0 || _player.getHomeHealth() <= 0 || _time >= _winTime )
+  {
+    status.gameScreen = false;
+    status.creditScreen = true;
+  }
 }
 
 void Game::buttonAction()

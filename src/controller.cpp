@@ -7,6 +7,33 @@ Controller::Controller()
   
 }
 
+void Controller::handleEvent( bool &running, std::vector<Button> &buttons, ButtonSprite &clickedButtonSprite ) const
+{
+  SDL_Event e;
+  bool mouseDown = false;
+  bool mouseUp = false;
+  bool inside = false;
+  int x, y;
+
+  while( SDL_PollEvent( &e ) )
+  {
+   
+    if( e.type == SDL_QUIT ) running = false;
+    else if (e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP )
+    { 
+
+      // check user interactions with button sprites
+      for( int j = 0; j < buttons.size(); j++ )
+      {
+        if( buttons[ j ].handleEvent( &e ) && buttons[ j ].getButtonState() == ButtonState::BUTTON_VISIBLE) //if button is clicked && button is visible, true
+        {
+          clickedButtonSprite = buttons[ j ].getSprite();
+        }
+      }
+    }
+  }
+}
+
 void Controller::handleEvent( bool &running, 
             std::vector<std::shared_ptr<Building>>& buildings, std::vector<Button>& buttons, ButtonSprite& clickedButtonSprite, std::shared_ptr<Building>& clickedBuilding ) const
 {

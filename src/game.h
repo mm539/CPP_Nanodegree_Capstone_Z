@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "SDL.h"
+#include "status.h"
 #include "player.h"
 #include "sprites.h"
 #include "controller.h"
@@ -21,7 +22,8 @@ class Game
         std::size_t bottom_panel_height );
   void Run( Controller const &controller,
             Renderer &renderer,
-            std::size_t target_frame_duration );
+            std::size_t target_frame_duration,
+            Status &status );
 
  private:
   // constructor functions
@@ -32,7 +34,7 @@ class Game
 
   // functions used to update the game state variables
   void endGame();
-  void update( bool& running );
+  void update( Status &status );
   void buttonAction();
   void updateButtons();
   void updateOverlay();

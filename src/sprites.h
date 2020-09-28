@@ -35,7 +35,9 @@ enum ButtonSprite
   BUTTON_SPRITE_SCOUT = 5,
   BUTTON_SPRITE_CLEAR = 6,
   BUTTON_SPRITE_SCAVENGE = 7,
-  BUTTON_TOTAL = 8
+  BUTTON_SPRITE_START = 8,
+  BUTTON_SPRITE_QUIT = 9,
+  BUTTON_TOTAL = 10
 };
 
 // used to determine how to display a button

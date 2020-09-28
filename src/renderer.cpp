@@ -86,3 +86,29 @@ void Renderer::renderAll( std::vector<std::shared_ptr<Building>>& buildings, Ove
   // update the screen
   SDL_RenderPresent( _renderer );
 }
+
+void Renderer::renderAll( std::vector<Button>& buttons)
+{
+  // clear the screen
+  SDL_SetRenderDrawColor( _renderer, 0x00, 0x00, 0x00, 0x00 );
+  SDL_RenderClear( _renderer );
+
+   // render buttons
+  int buttonCounter = 0;
+  int xPos = screen_width / 2 - 65;
+  int yPos = screen_height / 3;
+  int spacer = 75;
+
+  for( int j = 0; j < buttons.size(); j++ )
+  {
+    if( buttons[ j ].getButtonState() != ButtonState::BUTTON_INVISIBLE )
+    {
+      buttons[ j ].setPosition( xPos, yPos + spacer * buttonCounter );
+      buttons[ j ].render( _renderer );
+      buttonCounter++;
+    }
+  }
+
+  // update the screen
+  SDL_RenderPresent( _renderer );
+}

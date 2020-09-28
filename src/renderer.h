@@ -6,6 +6,7 @@
 #include "gfx.h"
 #include "sprites.h"
 #include "player.h"
+#include "status.h"
 #include <vector>
 #include <memory>
 
@@ -18,6 +19,7 @@ class Renderer
   ~Renderer();
 
   void renderAll( std::vector<std::shared_ptr<Building>>& buildings, Overlay& overlay, std::vector<Button>& buttons, Player& player );
+  void renderAll( std::vector<Button> &buttons );
 
  private:
   SDL_Window* _window;

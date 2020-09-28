@@ -2,6 +2,9 @@
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
+#include "mainmenu.h"
+#include "credits.h"
+#include "status.h"
 
 int main()
 {
@@ -14,17 +17,34 @@ int main()
   constexpr std::size_t kGRID_WIDTH{ 90 }; // 720 360 180 90
   constexpr std::size_t kGRID_HEIGHT{ 85 }; // 680 340 170 85
   constexpr std::size_t kLEFT_PANEL_WIDTH{ 240 };
-  
+  Status status;
 
   Renderer renderer( kSCREEN_WIDTH, kSCREEN_HEIGHT, 
                      kGRID_WIDTH, kGRID_HEIGHT, 
                      kLEFT_PANEL_WIDTH, kTOP_PANEL_HEIGHT,
                      kBOTTOM_PANEL_HEIGHT );
   Controller controller;
-  Game game( kSCREEN_WIDTH, kSCREEN_HEIGHT, 
+
+  while( status.running )
+  {
+    if( status.menuScreen )
+    {
+      MainMenu mainMenu( kSCREEN_WIDTH, kSCREEN_HEIGHT );
+      mainMenu.Run( controller, renderer, kMsPerFrame, status );
+    }
+    else if( status.gameScreen )
+    {
+      Game game( kSCREEN_WIDTH, kSCREEN_HEIGHT, 
              kGRID_WIDTH, kGRID_HEIGHT, 
              kLEFT_PANEL_WIDTH, kTOP_PANEL_HEIGHT,
              kBOTTOM_PANEL_HEIGHT );
-  game.Run( controller, renderer, kMsPerFrame );
-
+      game.Run( controller, renderer, kMsPerFrame, status );
+    }
+    else if( status.creditScreen )
+    {
+      Credits credits( kSCREEN_WIDTH, kSCREEN_HEIGHT );
+      credits.Run( controller, renderer, kMsPerFrame, status );
+    }
+  }
+    std::cout << "Game has terminated successfully!\n";
 }
