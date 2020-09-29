@@ -10,7 +10,7 @@
 #include <string>
 
 /********* 1. Forward declaration  *********/
-class Overlay;
+class GameStatsDisplay;
 
 /********* 2. ENUMS  *********/
 

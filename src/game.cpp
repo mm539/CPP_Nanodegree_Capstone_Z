@@ -14,7 +14,7 @@ Game::Game(std::size_t screen_width, std::size_t screen_height,
    _bottomPanelHeight( bottom_panel_height )
 {
   makeBuildings();
-  makeOverlay();
+  makeGSD(); // GameStatsDisplay
   makeButtons();
   makePlayer();
   _winTime = 24 * 4 + 24 * ( rand() % 3 ) + 9;
@@ -38,7 +38,7 @@ void Game::Run( Controller const &controller,
     // INPUT, UPDATE, RENDER
     controller.handleEvent( status.running, _buildings, _buttons, _clickedButtonSprite, _clickedBuilding );
     update( status );
-    renderer.renderAll( _buildings, _overlay, _buttons, _player ); 
+    renderer.renderAll( _buildings, _gameStatsDisplay, _buttons, _player ); 
 
     frame_end = SDL_GetTicks();
 
@@ -142,9 +142,11 @@ void Game::makeBuildings()
   }
 }
 
-void Game::makeOverlay()
+void Game::makeGSD()
 {
-  _overlay = Overlay( {0, 0 }, _leftPanelWidth, _sHeight );
+  _gameStatsDisplay = GameStatsDisplay();
+  _gameStatsDisplay.setLeftPanelWH( _leftPanelWidth, _leftPanelHeight );
+  _gameStatsDisplay.setBottomPanelWH( _bottomPanelWidth, _bottomPanelHeight );
 }
 
 void Game::makeButtons()
@@ -171,7 +173,7 @@ void Game::update( Status &status )
 {
   updateButtons(); // sets which buttons are visible, invisible, clickable according to 1. location of player 2. building clicked on
   buttonAction(); // performs the action set in _clickedButtonSprite
-  updateOverlay();
+  updateGSD();
  
   // if player is at home and has supplies, transfer those materials to the base
   if( ( _player.getPlayerFood() > 0 || _player.getPlayerMaterials() > 0 ) && _player.getLocationID() == _homeID )
@@ -364,40 +366,40 @@ void Game::updateButtons()
   });
 }
 
-void Game::updateOverlay()
+void Game::updateGSD()
 {
   // time
-  _overlay._texts._clockText = "Day : " + std::to_string( _time / 24 ) + "  Time : " + std::to_string( _time % 24 ) + " : 00";
-  _overlay._texts._buildingText = std::to_string( 999 );
+  _gameStatsDisplay._gameStatsTexts._clockText = "Day : " + std::to_string( _time / 24 ) + "  Time : " + std::to_string( _time % 24 ) + " : 00";
+  _gameStatsDisplay._gameStatsTexts._buildingText = std::to_string( 999 );
 
   // player stats
-  _overlay._texts._playerHealthText = "Health : " + std::to_string( _player.getPlayerHealth() ) + " / 100" ;
-  _overlay._texts._playerFoodText = "Food: " + std::to_string( _player.getPlayerFood() );
-  _overlay._texts._playerMaterialsText = "Materials : " + std::to_string( _player.getPlayerMaterials() );
+  _gameStatsDisplay._gameStatsTexts._playerHealthText = "Health : " + std::to_string( _player.getPlayerHealth() ) + " / 100" ;
+  _gameStatsDisplay._gameStatsTexts._playerFoodText = "Food: " + std::to_string( _player.getPlayerFood() );
+  _gameStatsDisplay._gameStatsTexts._playerMaterialsText = "Materials : " + std::to_string( _player.getPlayerMaterials() );
 
   // base stats
-  _overlay._texts._homeHealthText = "Defenses : " + std::to_string( _player.getHomeHealth() ) + " / 100";
-  _overlay._texts._homeFoodText = "Food : " + std::to_string( _player.getHomeFood() );
-  _overlay._texts._homeMaterialsText = "Materials : " + std::to_string( _player.getHomeMaterials() );
+  _gameStatsDisplay._gameStatsTexts._homeHealthText = "Defenses : " + std::to_string( _player.getHomeHealth() ) + " / 100";
+  _gameStatsDisplay._gameStatsTexts._homeFoodText = "Food : " + std::to_string( _player.getHomeFood() );
+  _gameStatsDisplay._gameStatsTexts._homeMaterialsText = "Materials : " + std::to_string( _player.getHomeMaterials() );
 
   // selected building stats
   if( _player.getLocationID() == _homeID )
   {
-    _overlay._texts._buildingDangerText = " ";
-    _overlay._texts._buildingScoutedText = " ";
-    _overlay._texts._buildingFoodText = " ";
-    _overlay._texts._buildingMaterialsText = " ";
+    _gameStatsDisplay._gameStatsTexts._buildingDangerText = " ";
+    _gameStatsDisplay._gameStatsTexts._buildingScoutedText = " ";
+    _gameStatsDisplay._gameStatsTexts._buildingFoodText = " ";
+    _gameStatsDisplay._gameStatsTexts._buildingMaterialsText = " ";
   }
   else
   {
-    _overlay._texts._buildingDangerText = "Danger : " +  _clickedBuilding->getDangerText();
-    _overlay._texts._buildingScoutedText = "Scouted : " + _clickedBuilding->getScoutedText();
-    _overlay._texts._buildingFoodText = "Food : " +  _clickedBuilding->getFoodText();
-    _overlay._texts._buildingMaterialsText = "Materials : " +  _clickedBuilding->getMaterialsText();
+    _gameStatsDisplay._gameStatsTexts._buildingDangerText = "Danger : " +  _clickedBuilding->getDangerText();
+    _gameStatsDisplay._gameStatsTexts._buildingScoutedText = "Scouted : " + _clickedBuilding->getScoutedText();
+    _gameStatsDisplay._gameStatsTexts._buildingFoodText = "Food : " +  _clickedBuilding->getFoodText();
+    _gameStatsDisplay._gameStatsTexts._buildingMaterialsText = "Materials : " +  _clickedBuilding->getMaterialsText();
   }
 
   //  bottom panel display text
-  _overlay._texts._actionResultText = _actionResultText;
+  _gameStatsDisplay._gameStatsTexts._actionResultText = _actionResultText;
 }
 
 SDL_Point Game::getBuildingCoord( int id )

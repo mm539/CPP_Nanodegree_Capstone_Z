@@ -20,8 +20,9 @@ class LTexture
   void setBlendMode( SDL_BlendMode blending ); // set blending
   void setAlpha( Uint8 alpha );
   void render( SDL_Renderer* rend, SDL_Point pos, int width, int height );
-  void renderRect( SDL_Renderer* rend, SDL_Point pos, int width, int height );
+  void renderRect( SDL_Renderer* rend, SDL_Point pos );
   void renderRectOutline( SDL_Renderer* rend, SDL_Point pos, int width, int height );
+  void setTextureWH( int width, int height );
   int getWidth();
   int getHeight();
 
@@ -34,7 +35,7 @@ class LTexture
 
 /********* 2. Overlay  *********/
 
-struct OTextures // overlay textures
+struct GameStatsTextures // overlay textures
 {
   LTexture _clockT;
 
@@ -52,9 +53,12 @@ struct OTextures // overlay textures
   LTexture _buildingMaterialsT;
   LTexture _buildingScoutedT;
   LTexture _buildingDangerT;
+
+  LTexture _leftPanel;
+  LTexture _bottomPanel;
 };
 
-struct OverlayTexts
+struct GameStatsTexts
 {
   std::string _clockText;
   std::string _buildingText;
@@ -76,29 +80,23 @@ struct OverlayTexts
   std::string _actionResultText;
 };
 
-class Overlay
+int determineWidth( std::string& text );
+
+class GameStatsDisplay
 {
  public:
-  // constructors
-  Overlay(){}
-  Overlay( SDL_Point pos, int width, int height );
-
-  // destructor
-  ~Overlay();
+  GameStatsDisplay(); // constructor
+  ~GameStatsDisplay(){} // destructor
   
   void render( SDL_Renderer* rend );
-  OverlayTexts _texts;
+  void setLeftPanelWH( int width, int height );
+  void setBottomPanelWH( int width, int height );
+
+  GameStatsTexts _gameStatsTexts;
 
  private:
   TTF_Font* _font = nullptr;
-  LTexture _leftPanel;
-  OTextures _oTextures; // overlay textures
-  LTexture _bottomPanel;
-
-  
-  SDL_Point _position;
-  int _width;
-  int _height;
+  GameStatsTextures _gameStatsTextures; // gameStatsTextures
 };
 
 #endif

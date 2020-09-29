@@ -94,9 +94,9 @@ void LTexture::render( SDL_Renderer* rend, SDL_Point pos, int width, int height 
   SDL_RenderCopy( rend, _texture, &src, &dest );
 }
 
-void LTexture::renderRect( SDL_Renderer* rend, SDL_Point pos, int width, int height )
+void LTexture::renderRect( SDL_Renderer* rend, SDL_Point pos )
 {
-  SDL_Rect fillRect = { pos.x, pos.y, width, height };
+  SDL_Rect fillRect = { pos.x, pos.y, _width, _height };
   SDL_SetRenderDrawColor( rend, 0x40, 0x31, 0x0A ,0xFF );
   SDL_RenderFillRect( rend, &fillRect );
 }
@@ -118,71 +118,85 @@ int LTexture::getHeight()
 	return _height;
 }
 
-
-/********* 2. Overlay  *********/
-
-Overlay::Overlay( SDL_Point pos, int width, int height )
+void LTexture::setTextureWH( int width, int height )
 {
-  _position = pos;
   _width = width;
   _height = height;
+}
 
+/********* 2. GameStatsDisplay  *********/
+
+GameStatsDisplay::GameStatsDisplay()
+{
   _font = TTF_OpenFont( "../fonts/black-caps-font/BlackCapsRegular-wgA2.ttf", 16 );
   if( _font == nullptr  ) std::cout<< "Failed to load _font. SDL_ttf Error:\n" << TTF_GetError() << std::endl;
  }
 
-Overlay::~Overlay(){}
+int determineWidth( std::string &text )
+{
+  int space = 12; //space per character
+  return space * strlen( text.c_str() );
+}
 
-void Overlay::render( SDL_Renderer* rend )
+void GameStatsDisplay::render( SDL_Renderer* rend )
 {
   // 1. render left panel
-  _leftPanel.renderRect( rend, _position, _width, _height );
+  _gameStatsTextures._leftPanel.renderRect( rend, {0, 0} );
 
   // 2. render game and base info
   SDL_Color textColor = { 255, 255, 255 };
 
-  _oTextures._clockT.loadFromRenderedText( rend, _texts._clockText, textColor, _font );
-  _oTextures._clockT.render( rend, { 400 , 5 }, 210, 50 );
+  _gameStatsTextures._clockT.loadFromRenderedText( rend, _gameStatsTexts._clockText, textColor, _font );
+  _gameStatsTextures._clockT.render( rend, { 400 , 5 }, determineWidth( _gameStatsTexts._clockText ), 50 );
 
-  _oTextures._homeHealthT.loadFromRenderedText( rend, _texts._homeHealthText, textColor, _font );
-  _oTextures._homeHealthT.render( rend, { 250 , 60 }, 250, 40 );
+  _gameStatsTextures._homeHealthT.loadFromRenderedText( rend, _gameStatsTexts._homeHealthText, textColor, _font );
+  _gameStatsTextures._homeHealthT.render( rend, { 250 , 60 }, determineWidth( _gameStatsTexts._homeHealthText ), 40 );
 
-  _oTextures._homeFoodT.loadFromRenderedText( rend, _texts._homeFoodText, textColor, _font );
-  _oTextures._homeFoodT.render( rend, { 530 , 60 }, 150, 40 );
+  _gameStatsTextures._homeFoodT.loadFromRenderedText( rend, _gameStatsTexts._homeFoodText, textColor, _font );
+  _gameStatsTextures._homeFoodT.render( rend, { 530 , 60 }, determineWidth( _gameStatsTexts._homeFoodText ), 40 );
 
-  _oTextures._homeMaterialsT.loadFromRenderedText( rend, _texts._homeMaterialsText, textColor, _font );
-  _oTextures._homeMaterialsT.render( rend, { 740 , 60 }, 180, 40 );
+  _gameStatsTextures._homeMaterialsT.loadFromRenderedText( rend, _gameStatsTexts._homeMaterialsText, textColor, _font );
+  _gameStatsTextures._homeMaterialsT.render( rend, { 740 , 60 }, determineWidth( _gameStatsTexts._homeMaterialsText ), 40 );
 
   // 3. render player info
   textColor = { 0xa6, 0xa5, 0xa2 };
 
-  _oTextures._playerHealthT.loadFromRenderedText( rend, _texts._playerHealthText, textColor, _font );
-  _oTextures._playerHealthT.render( rend, { 20 , 100 }, 180, 40 );
+  _gameStatsTextures._playerHealthT.loadFromRenderedText( rend, _gameStatsTexts._playerHealthText, textColor, _font );
+  _gameStatsTextures._playerHealthT.render( rend, { 20 , 100 }, determineWidth( _gameStatsTexts._playerHealthText ), 40 );
 
-  _oTextures._playerFoodT.loadFromRenderedText( rend, _texts._playerFoodText, textColor, _font );
-  _oTextures._playerFoodT.render( rend, { 20 , 160 }, 180, 40 );
+  _gameStatsTextures._playerFoodT.loadFromRenderedText( rend, _gameStatsTexts._playerFoodText, textColor, _font );
+  _gameStatsTextures._playerFoodT.render( rend, { 20 , 160 }, determineWidth( _gameStatsTexts._playerFoodText ), 40 );
 
-  _oTextures._playerMaterialsT.loadFromRenderedText( rend, _texts._playerMaterialsText, textColor, _font );
-  _oTextures._playerMaterialsT.render( rend, { 20 , 220 }, 180, 40 );
+  _gameStatsTextures._playerMaterialsT.loadFromRenderedText( rend, _gameStatsTexts._playerMaterialsText, textColor, _font );
+  _gameStatsTextures._playerMaterialsT.render( rend, { 20 , 220 }, determineWidth( _gameStatsTexts._playerMaterialsText ), 40 );
 
   // 4. render bottom panel ( result of a button click )
   textColor = { 0xff, 0xcb, 0x3d };
-  int stringLength = strlen( _texts._actionResultText.c_str() );
-  _bottomPanel.loadFromRenderedText( rend, _texts._actionResultText, textColor, _font );
-  _bottomPanel.render( rend, { 270, 820 }, stringLength * 15, 40);
+  _gameStatsTextures._bottomPanel.loadFromRenderedText( rend, _gameStatsTexts._actionResultText, textColor, _font );
+  _gameStatsTextures._bottomPanel.render( rend, { 270, 820 }, determineWidth( _gameStatsTexts._actionResultText ), 40);
 
   // 5. render building info
   textColor = { 0xc4, 0x66, 0x66 };
-  _oTextures._buildingScoutedT.loadFromRenderedText( rend, _texts._buildingScoutedText, textColor, _font );
-  _oTextures._buildingScoutedT.render( rend, { 20, 700 }, 180, 40 );
+  _gameStatsTextures._buildingScoutedT.loadFromRenderedText( rend, _gameStatsTexts._buildingScoutedText, textColor, _font );
+  _gameStatsTextures._buildingScoutedT.render( rend, { 20, 700 }, determineWidth( _gameStatsTexts._buildingScoutedText ), 40 );
 
-  _oTextures._buildingDangerT.loadFromRenderedText( rend, _texts._buildingDangerText, textColor, _font );
-  _oTextures._buildingDangerT.render( rend, { 20, 760 }, 180, 40 );
+  _gameStatsTextures._buildingDangerT.loadFromRenderedText( rend, _gameStatsTexts._buildingDangerText, textColor, _font );
+  _gameStatsTextures._buildingDangerT.render( rend, { 20, 760 }, determineWidth( _gameStatsTexts._buildingDangerText ), 40 );
 
-  _oTextures._buildingFoodT.loadFromRenderedText( rend, _texts._buildingFoodText, textColor, _font );
-  _oTextures._buildingFoodT.render( rend, { 20, 800 }, 180, 40 );
+  _gameStatsTextures._buildingFoodT.loadFromRenderedText( rend, _gameStatsTexts._buildingFoodText, textColor, _font );
+  _gameStatsTextures._buildingFoodT.render( rend, { 20, 800 }, determineWidth( _gameStatsTexts._buildingFoodText ), 40 );
 
-  _oTextures._buildingMaterialsT.loadFromRenderedText( rend, _texts._buildingMaterialsText, textColor, _font );
-  _oTextures._buildingMaterialsT.render( rend, { 20, 840 }, 180, 40 );
+  _gameStatsTextures._buildingMaterialsT.loadFromRenderedText( rend, _gameStatsTexts._buildingMaterialsText, textColor, _font );
+  _gameStatsTextures._buildingMaterialsT.render( rend, { 20, 840 }, determineWidth( _gameStatsTexts._buildingMaterialsText ), 40 );
 
+}
+
+void GameStatsDisplay::setLeftPanelWH( int width, int height )
+{
+  _gameStatsTextures._leftPanel.setTextureWH( width, height );
+}
+
+void GameStatsDisplay::setBottomPanelWH( int width, int height )
+{
+  _gameStatsTextures._bottomPanel.setTextureWH( width, height );
 }

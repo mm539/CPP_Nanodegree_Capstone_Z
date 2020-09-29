@@ -50,14 +50,14 @@ Renderer::~Renderer()
   TTF_Quit();
 }
 
-void Renderer::renderAll( std::vector<std::shared_ptr<Building>>& buildings, Overlay& overlay, std::vector<Button>& buttons, Player& player )
+void Renderer::renderAll( std::vector<std::shared_ptr<Building>>& buildings, GameStatsDisplay& stats, std::vector<Button>& buttons, Player& player )
 {
   // clear the screen
   SDL_SetRenderDrawColor( _renderer, 0x00, 0x00, 0x00, 0x00 );
   SDL_RenderClear( _renderer );
 
-  // render the overlay
-  overlay.render( _renderer );
+  // render the game stats
+  stats.render( _renderer );
 
   // render buildings on map
   for( int i = 0; i < buildings.size(); i++ )

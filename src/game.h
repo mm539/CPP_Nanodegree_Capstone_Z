@@ -28,7 +28,7 @@ class Game
  private:
   // constructor functions
   void makeBuildings();
-  void makeOverlay();
+  void makeGSD(); // gameStatsDisplay
   void makeButtons();
   void makePlayer();
 
@@ -37,7 +37,7 @@ class Game
   void update( Status &status );
   void buttonAction();
   void updateButtons();
-  void updateOverlay();
+  void updateGSD();
   void clearBuilding();
   void scavengeBuilding();
   int computeTravelTime();
@@ -56,7 +56,7 @@ class Game
   int _homeID; // the id of the home building
 
   // display information
-  Overlay _overlay;
+  GameStatsDisplay _gameStatsDisplay;
   std::string _actionResultText { "Day 0" };
 
   std::size_t _sWidth;
@@ -64,7 +64,9 @@ class Game
   std::size_t _gWidth;
   std::size_t _gHeight;
   std::size_t _leftPanelWidth;
+  std::size_t _leftPanelHeight { 400 };
   std::size_t _topPanelHeight;
+  std::size_t _bottomPanelWidth { 600 };
   std::size_t _bottomPanelHeight;
 };
 
