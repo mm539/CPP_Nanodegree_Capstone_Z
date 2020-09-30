@@ -4,14 +4,16 @@
 #include <random>
 #include <iostream>
 
-Game::Game(std::size_t screen_width, std::size_t screen_height,
-        std::size_t grid_width, std::size_t grid_height,
-        std::size_t left_panel_width, std::size_t top_panel_height,
-        std::size_t bottom_panel_height )
- : _sWidth( screen_width ), _sHeight( screen_height ),
-   _gWidth( grid_width ), _gHeight( grid_height ),
-   _leftPanelWidth( left_panel_width ), _topPanelHeight( top_panel_height ),
-   _bottomPanelHeight( bottom_panel_height )
+Game::Game(int screen_width, int screen_height,
+        int grid_width, int grid_height,
+        PanelPD left_panel,
+        PanelPD top_panel,
+        PanelPD bottom_panel,
+        PanelPD map_panel )
+ : _screenWidth( screen_width ), _screenHeight( screen_height ),
+   _gridWidth( grid_width ), _gridHeight( grid_height ),
+   _leftPanel( left_panel ), _topPanel( top_panel ),
+   _bottomPanel( bottom_panel ), _mapPanel( map_panel )
 {
   makeBuildings();
   makeGSD(); // GameStatsDisplay
@@ -78,8 +80,8 @@ void Game::endGame()
 void Game::makeBuildings()
 {
   // x * y is the total number of buildings
-  int x = ( _sWidth - _leftPanelWidth ) / _gWidth;
-  int y = ( _sHeight - _topPanelHeight - _bottomPanelHeight ) / _gHeight;
+  int x = _mapPanel._w / _gridWidth;
+  int y = _mapPanel._h / _gridHeight;
 
   srand( time( NULL ) );
   int rando = rand() % 2;
@@ -94,8 +96,8 @@ void Game::makeBuildings()
         _buildings.emplace_back( 
         std::shared_ptr<Building> ( new Building( i * y + j,
                   BUILDING_SPRITE_HOME,
-                  _gWidth , _gHeight,
-                  _leftPanelWidth + j * _gWidth, _topPanelHeight + i * _gHeight,
+                  _gridWidth , _gridHeight,
+                  _leftPanel._w + j * _gridWidth, _topPanel._h + i * _gridHeight,
                   "../img/buildings-home128.bmp", 0, 0, 0) )  // int food, int materials, int dangerLevel
         );
         _clickedBuilding = _buildings.back();
@@ -107,8 +109,8 @@ void Game::makeBuildings()
           _buildings.emplace_back( 
           std::shared_ptr<Building> ( new Building( i * y + j,
                   BUILDING_SPRITE_HOUSE,
-                  _gWidth , _gHeight,
-                  _leftPanelWidth + j * _gWidth, _topPanelHeight + i * _gHeight,
+                  _gridWidth , _gridHeight,
+                  _leftPanel._w + j * _gridWidth, _topPanel._h + i * _gridHeight,
                   "../img/buildings-house128.bmp",
                   10 + rand() % 6, 10 + rand() % 6, 15 + rand() % 10 ) ) // int food, int materials, int dangerLevel
           );
@@ -118,8 +120,8 @@ void Game::makeBuildings()
           _buildings.emplace_back( 
           std::shared_ptr<Building> ( new Building( i * y + j,
                   BUILDING_SPRITE_HSTORE,
-                  _gWidth , _gHeight,
-                  _leftPanelWidth + j * _gWidth, _topPanelHeight + i * _gHeight,
+                  _gridWidth , _gridHeight,
+                  _leftPanel._w + j * _gridWidth, _topPanel._h + i * _gridHeight,
                   "../img/buildings-hstore128.bmp",
                   0, 15 + rand() % 30, 20 + rand() % 10 ) )
           );
@@ -129,8 +131,8 @@ void Game::makeBuildings()
           _buildings.emplace_back( 
           std::shared_ptr<Building> ( new Building( i * y + j,
                   BUILDING_SPRITE_CSTORE,
-                  _gWidth , _gHeight,
-                  _leftPanelWidth + j * _gWidth, _topPanelHeight + i * _gHeight,
+                  _gridWidth , _gridHeight,
+                  _leftPanel._w + j * _gridWidth, _topPanel._h + i * _gridHeight,
                   "../img/buildings-cstore128.bmp",
                   15 + rand() % 30, 0, 20 + rand() % 10 ) )
           );
@@ -145,8 +147,9 @@ void Game::makeBuildings()
 void Game::makeGSD()
 {
   _gameStatsDisplay = GameStatsDisplay();
-  _gameStatsDisplay.setLeftPanelWH( _leftPanelWidth, _leftPanelHeight );
-  _gameStatsDisplay.setBottomPanelWH( _bottomPanelWidth, _bottomPanelHeight );
+  _gameStatsDisplay.setLeftPanelWH( _leftPanel._w, _leftPanel._h );
+  _gameStatsDisplay.setTopPanelWH( _topPanel._w, _topPanel._h );
+  _gameStatsDisplay.setBottomPanelWH( _bottomPanel._w, _bottomPanel._h );
 }
 
 void Game::makeButtons()
@@ -422,7 +425,7 @@ int Game::computeTravelTime()
   int yDif = abs( _player.getPosition().y - buildingCoord.y );
   
 
-  return xDif > yDif ? xDif / _gWidth : yDif / _gHeight;
+  return xDif > yDif ? xDif / _gridWidth : yDif / _gridHeight;
 }
 
 void Game::clearBuilding()

@@ -13,9 +13,7 @@
 class Renderer
 {
  public:
-  Renderer( const std::size_t screen_width, const std::size_t screen_height, const std::size_t grid_width, const std::size_t grid_height, 
-  const std::size_t left_panel_width, const std::size_t top_panel_height,
-  const std::size_t bottom_panel_height );
+  Renderer( const int screen_width, const int screen_height, const int grid_width, const int grid_height );
   ~Renderer();
 
   void renderAll( std::vector<std::shared_ptr<Building>>& buildings, GameStatsDisplay& stats, std::vector<Button>& buttons, Player& player );
@@ -25,14 +23,20 @@ class Renderer
   SDL_Window* _window;
   SDL_Renderer* _renderer;
 
-  const std::size_t screen_width;
-  const std::size_t screen_height;
-  const std::size_t grid_width;
-  const std::size_t grid_height;
-  const std::size_t left_panel_width;
-  const std::size_t top_panel_height;
-  const std::size_t bottom_panel_height;
+  const int screen_width;
+  const int screen_height;
+  const int grid_width;
+  const int grid_height;
+};
 
+struct PanelPD // Panel Position Dimensions
+{
+  PanelPD( int x, int y, int w, int h ): 
+         _x( x ), _y( y ), _w( w ), _h( h ) {}
+  int _x;
+  int _y;
+  int _w;
+  int _h;
 };
 
 #endif

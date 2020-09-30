@@ -2,20 +2,14 @@
 #include <iostream>
 #include <string>
 
-Renderer::Renderer( const std::size_t screen_width,
-                    const std::size_t screen_height,
-                    const std::size_t grid_width,
-                    const std::size_t grid_height,
-                    const std::size_t left_panel_width,
-                    const std::size_t top_panel_height,
-                    const std::size_t bottom_panel_height )
+Renderer::Renderer( const int screen_width,
+                    const int screen_height,
+                    const int grid_width,
+                    const int grid_height )
                 : screen_width( screen_width ),
                   screen_height( screen_height ),
                   grid_width( grid_width ),
-                  grid_height( grid_height),
-                  left_panel_width( left_panel_width),
-                  top_panel_height( top_panel_height ),
-                  bottom_panel_height( bottom_panel_height )
+                  grid_height( grid_height)
 {
   // initialize SDL
   if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) std::cerr << "SDL could not initialize. SDL Error: \n" << SDL_GetError() << std::endl;

@@ -13,13 +13,14 @@
 class Game
 {
  public:
-  Game( std::size_t screen_width,
-        std::size_t screen_height,
-        std::size_t grid_width,
-        std::size_t grid_height,
-        std::size_t left_panel_width,
-        std::size_t top_panel_height,
-        std::size_t bottom_panel_height );
+  Game( int screen_width,
+        int screen_height,
+        int grid_width,
+        int grid_height,
+        PanelPD left_panel,
+        PanelPD top_panel,
+        PanelPD bottom_panel,
+        PanelPD map_panel );
   void Run( Controller const &controller,
             Renderer &renderer,
             std::size_t target_frame_duration,
@@ -59,15 +60,14 @@ class Game
   GameStatsDisplay _gameStatsDisplay;
   std::string _actionResultText { "Day 0" };
 
-  std::size_t _sWidth;
-  std::size_t _sHeight;
-  std::size_t _gWidth;
-  std::size_t _gHeight;
-  std::size_t _leftPanelWidth;
-  std::size_t _leftPanelHeight { 400 };
-  std::size_t _topPanelHeight;
-  std::size_t _bottomPanelWidth { 600 };
-  std::size_t _bottomPanelHeight;
+  int _screenWidth;
+  int _screenHeight;
+  int _gridWidth;
+  int _gridHeight;
+  PanelPD _leftPanel;
+  PanelPD _bottomPanel;
+  PanelPD _topPanel;
+  PanelPD _mapPanel;
 };
 
 #endif

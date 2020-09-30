@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
@@ -8,21 +9,31 @@
 
 int main()
 {
-  constexpr std::size_t kTOP_PANEL_HEIGHT { 120 };
-  constexpr std::size_t kBOTTOM_PANEL_HEIGHT { 80 };
   constexpr std::size_t kFPS{ 60 };
   constexpr std::size_t kMsPerFrame{ 1000 / kFPS };
-  constexpr std::size_t kSCREEN_WIDTH{ 960 }; 
-  constexpr std::size_t kSCREEN_HEIGHT{ 680 + kTOP_PANEL_HEIGHT + kBOTTOM_PANEL_HEIGHT};
-  constexpr std::size_t kGRID_WIDTH{ 90 }; // 720 360 180 90
-  constexpr std::size_t kGRID_HEIGHT{ 85 }; // 680 340 170 85
-  constexpr std::size_t kLEFT_PANEL_WIDTH{ 240 };
-  Status status;
+  constexpr int kSCREEN_WIDTH{ 960 };
+  constexpr int kSCREEN_HEIGHT{ 880};
+  constexpr int kGRID_WIDTH{ 90 }; // 720 360 180 90
+  constexpr int kGRID_HEIGHT{ 85 }; // 680 340 170 85
+
+  // 
+  int leftPanelWidth = 240;
+  int topPanelHeight = 120;
+  int bottomPanelHeight = 80;
+
+  // x, y, w, h
+  PanelPD leftPanelPD( 0, 0, leftPanelWidth, kSCREEN_HEIGHT );
+  PanelPD topPanelPD( leftPanelPD._w, 0, 
+                       kSCREEN_WIDTH - leftPanelPD._w, topPanelHeight );
+  PanelPD bottomPanelPD( leftPanelPD._w, kSCREEN_HEIGHT - bottomPanelHeight,
+                       kSCREEN_WIDTH - leftPanelPD._w, bottomPanelHeight );
+  PanelPD mapPanelPD( leftPanelPD._w, topPanelPD._h,
+          kSCREEN_WIDTH - leftPanelPD._w, kSCREEN_HEIGHT - topPanelPD._h );
+
+  Status status; // struct containing bools about whether the game is running and which screen ( menu, game, credits ) is active
 
   Renderer renderer( kSCREEN_WIDTH, kSCREEN_HEIGHT, 
-                     kGRID_WIDTH, kGRID_HEIGHT, 
-                     kLEFT_PANEL_WIDTH, kTOP_PANEL_HEIGHT,
-                     kBOTTOM_PANEL_HEIGHT );
+                     kGRID_WIDTH, kGRID_HEIGHT );
   Controller controller;
 
   while( status.running )
@@ -36,8 +47,8 @@ int main()
     {
       Game game( kSCREEN_WIDTH, kSCREEN_HEIGHT, 
              kGRID_WIDTH, kGRID_HEIGHT, 
-             kLEFT_PANEL_WIDTH, kTOP_PANEL_HEIGHT,
-             kBOTTOM_PANEL_HEIGHT );
+             leftPanelPD, topPanelPD,
+             bottomPanelPD, mapPanelPD );
       game.Run( controller, renderer, kMsPerFrame, status );
     }
     else if( status.creditScreen )

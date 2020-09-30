@@ -200,3 +200,8 @@ void GameStatsDisplay::setBottomPanelWH( int width, int height )
 {
   _gameStatsTextures._bottomPanel.setTextureWH( width, height );
 }
+
+void GameStatsDisplay::setTopPanelWH( int width, int height )
+{
+  _gameStatsTextures._topPanel.setTextureWH( width, height );
+}

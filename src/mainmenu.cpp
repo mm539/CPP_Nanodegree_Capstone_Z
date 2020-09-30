@@ -61,12 +61,10 @@ void MainMenu::buttonAction( Status &status)
     case ButtonSprite::BUTTON_SPRITE_START:
       status.menuScreen = false;
       status.gameScreen = true;
-      std::cout << "start clicked!\n";
       break;
     case ButtonSprite::BUTTON_SPRITE_QUIT:
       status.menuScreen = false;
       status.running = false;
-      std::cout << "quit clicked!\n";
       break;
     default:
       break;

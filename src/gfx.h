@@ -55,6 +55,7 @@ struct GameStatsTextures // overlay textures
   LTexture _buildingDangerT;
 
   LTexture _leftPanel;
+  LTexture _topPanel;
   LTexture _bottomPanel;
 };
 
@@ -90,6 +91,7 @@ class GameStatsDisplay
   
   void render( SDL_Renderer* rend );
   void setLeftPanelWH( int width, int height );
+  void setTopPanelWH( int width, int height );
   void setBottomPanelWH( int width, int height );
 
   GameStatsTexts _gameStatsTexts;
