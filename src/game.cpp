@@ -386,7 +386,7 @@ void Game::updateGSD()
   _gameStatsDisplay._gameStatsTexts._homeMaterialsText = "Materials : " + std::to_string( _player.getHomeMaterials() );
 
   // selected building stats
-  if( _player.getLocationID() == _homeID )
+  if( _clickedBuilding->getID() == _homeID )
   {
     _gameStatsDisplay._gameStatsTexts._buildingDangerText = " ";
     _gameStatsDisplay._gameStatsTexts._buildingScoutedText = " ";
