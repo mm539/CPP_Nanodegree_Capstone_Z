@@ -29,14 +29,4 @@ class Renderer
   const int grid_height;
 };
 
-struct PanelPD // Panel Position Dimensions
-{
-  PanelPD( int x, int y, int w, int h ): 
-         _x( x ), _y( y ), _w( w ), _h( h ) {}
-  int _x;
-  int _y;
-  int _w;
-  int _h;
-};
-
 #endif

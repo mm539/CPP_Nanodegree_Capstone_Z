@@ -101,4 +101,43 @@ class GameStatsDisplay
   GameStatsTextures _gameStatsTextures; // gameStatsTextures
 };
 
+/********* 3. Panel  *********/
+
+struct PanelPD // Panel Position Dimensions
+{
+  PanelPD(){}
+  PanelPD( int x, int y, int w, int h ): 
+         _x( x ), _y( y ), _w( w ), _h( h ) {}
+  void setPanelPD( int x, int y, int w, int h );
+  int _x { 0 };
+  int _y { 0 };
+  int _w { 0 };
+  int _h { 0 };
+};
+
+/********* 4. Initialization dimensions  *********/
+
+struct InitDimen
+{
+  InitDimen();
+  
+  const std::size_t kFPS{ 60 };
+  const std::size_t kMsPerFrame{ 1000 / kFPS };
+  const int kSCREEN_WIDTH{ 960 };
+  const int kSCREEN_HEIGHT{ 880};
+  const int kGRID_WIDTH{ 90 }; // 720 360 180 90
+  const int kGRID_HEIGHT{ 85 }; // 680 340 170 85
+
+  // 
+  int leftPanelWidth = 240;
+  int topPanelHeight = 120;
+  int bottomPanelHeight = 80; 
+
+  // x, y, w, h
+  PanelPD leftPanelPD;
+  PanelPD topPanelPD;
+  PanelPD bottomPanelPD;
+  PanelPD mapPanelPD;
+};
+
 #endif

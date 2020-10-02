@@ -205,3 +205,35 @@ void GameStatsDisplay::setTopPanelWH( int width, int height )
 {
   _gameStatsTextures._topPanel.setTextureWH( width, height );
 }
+
+/********* 3. Panel  *********/
+
+void PanelPD::setPanelPD( int x, int y, int w, int h )
+{
+  int _x { x };
+  int _y { y };
+  int _w { w };
+  int _h { h };
+}
+
+/********* 4. Initialization dimensions  *********/
+
+InitDimen::InitDimen()
+{
+    // x, y, w, h
+  leftPanelPD = PanelPD( 0, 0, leftPanelWidth, kSCREEN_HEIGHT );
+  topPanelPD = PanelPD( leftPanelWidth, 0, 
+                       kSCREEN_WIDTH - leftPanelWidth, topPanelHeight );
+  bottomPanelPD = PanelPD( leftPanelWidth, kSCREEN_HEIGHT - bottomPanelHeight,
+                       kSCREEN_WIDTH - leftPanelWidth, bottomPanelHeight );
+  mapPanelPD = PanelPD( leftPanelWidth, topPanelHeight,
+          kSCREEN_WIDTH - leftPanelWidth, kSCREEN_HEIGHT - topPanelHeight );
+          /* why does the code below produce a segmentation fault??
+  leftPanelPD.setPanelPD( 0, 0, leftPanelWidth, kSCREEN_HEIGHT );
+  topPanelPD.setPanelPD( leftPanelWidth, 0, 
+                       kSCREEN_WIDTH - leftPanelWidth, topPanelHeight );
+  bottomPanelPD.setPanelPD( leftPanelWidth, kSCREEN_HEIGHT - bottomPanelHeight,
+                       kSCREEN_WIDTH - leftPanelWidth, bottomPanelHeight );
+  mapPanelPD.setPanelPD( leftPanelWidth, topPanelHeight,
+          kSCREEN_WIDTH - leftPanelWidth, kSCREEN_HEIGHT - topPanelHeight );*/
+}
