@@ -18,9 +18,10 @@ class LTexture
   void free(); // deallocates memory
   void setColor( Uint8 red, Uint8 green, Uint8 blue ); // texture rgb
   void setBlendMode( SDL_BlendMode blending ); // set blending
+  void setBlendModeForDraw( SDL_Renderer *rend, SDL_BlendMode blending ); 
   void setAlpha( Uint8 alpha );
   void render( SDL_Renderer* rend, SDL_Point pos, int width, int height );
-  void renderRect( SDL_Renderer* rend, SDL_Point pos );
+  void renderRect( SDL_Renderer* rend, SDL_Point pos, SDL_Color color );
   void renderRectOutline( SDL_Renderer* rend, SDL_Point pos, int width, int height );
   void setTextureWH( int width, int height );
   int getWidth();

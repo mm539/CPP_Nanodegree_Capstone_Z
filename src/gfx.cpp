@@ -82,6 +82,11 @@ void LTexture::setBlendMode( SDL_BlendMode blending )
   SDL_SetTextureBlendMode( _texture, blending );
 }
 
+void LTexture::setBlendModeForDraw( SDL_Renderer *rend, SDL_BlendMode blending )
+{
+  SDL_SetRenderDrawBlendMode( rend, blending );
+}
+
 void LTexture::setAlpha( Uint8 alpha )
 {
   SDL_SetTextureAlphaMod( _texture, alpha );
@@ -94,10 +99,10 @@ void LTexture::render( SDL_Renderer* rend, SDL_Point pos, int width, int height 
   SDL_RenderCopy( rend, _texture, &src, &dest );
 }
 
-void LTexture::renderRect( SDL_Renderer* rend, SDL_Point pos )
+void LTexture::renderRect( SDL_Renderer* rend, SDL_Point pos, SDL_Color color )
 {
   SDL_Rect fillRect = { pos.x, pos.y, _width, _height };
-  SDL_SetRenderDrawColor( rend, 0x40, 0x31, 0x0A ,0xFF );
+  SDL_SetRenderDrawColor( rend, color.r, color.g, color.b, color.a );
   SDL_RenderFillRect( rend, &fillRect );
 }
 
@@ -141,7 +146,7 @@ int determineWidth( std::string &text )
 void GameStatsDisplay::render( SDL_Renderer* rend )
 {
   // 1. render left panel
-  _gameStatsTextures._leftPanel.renderRect( rend, {0, 0} );
+  _gameStatsTextures._leftPanel.renderRect( rend, {0, 0}, { 0x40, 0x31, 0x0A ,0xFF } );
 
   // 2. render game and base info
   SDL_Color textColor = { 255, 255, 255 };

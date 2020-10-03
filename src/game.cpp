@@ -335,8 +335,7 @@ void Game::updateButtons()
     {
       if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_REST )
       {
-        if( playerHealth < 100) b.setButtonState( ButtonState::BUTTON_VISIBLE );
-        else b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );
+        b.setButtonState( ButtonState::BUTTON_VISIBLE );
       }
       else if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_REPAIR )
       {

@@ -130,11 +130,15 @@ SDL_Point Building::getBuildingCoord()
 }
 void Building::render(SDL_Renderer* rend)
 {
+  
   _LTexture.loadTextureFromBMP( rend, _imgPath );
   _LTexture.render( rend , _position, _width, _height );
   if( _selected == true )
   {
-    _LTexture.renderRectOutline( rend, _position, _width, _height );
+    _LTexture.setTextureWH( _width, _height );
+    _LTexture.setBlendModeForDraw( rend, SDL_BLENDMODE_BLEND );
+    _LTexture.setAlpha( 0 );
+    _LTexture.renderRect( rend, _position, { 128, 0, 128, 56 } );
   }
 }
 
