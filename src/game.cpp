@@ -15,6 +15,7 @@ Game::Game(int screen_width, int screen_height,
    _leftPanel( left_panel ), _topPanel( top_panel ),
    _bottomPanel( bottom_panel ), _mapPanel( map_panel )
 {
+  _creditsMSG = TextDisplay( "filler", { 100, 100 } );
   makeBuildings();
   makeGSD(); // GameStatsDisplay
   makeButtons();
@@ -61,19 +62,20 @@ void Game::endGame()
 {
   if ( _player.getPlayerHealth() > 0 && _player.getHomeHealth() > 0 && _time >= _winTime )
   {
-    std::cout << "You hear the sound of gunfire quickly approaching your location. As quickly as you can, you use your shirt and a long branch on the ground nearby to make a white flag to wave in the air. In the distance you hear faint shouts of what sounds like \"We've got another survivor! We've got another survivor!\" Soon, the soldiers make it to your location and beckon you onto a truck with what appears to be more survivors.\n  Congratulations! You survived!\n";
+    _creditsMSG.setText("You hear the sound of gunfire quickly approaching your location. As quickly as you can, you use your shirt and a long branch on the ground nearby to make a white flag to wave in the air. In the distance you hear faint shouts of what sounds like \"We've got another survivor! We've got another survivor!\" Soon, the soldiers make it to your location and beckon you onto a truck with what appears to be more survivors.\n  Congratulations! You survived!\n");
   }
   else if ( _player.getPlayerHealth() <= 0 )
   {
-    std::cout << "You've died! Better luck next time!\n";
+    _creditsMSG.setText("You've died! Better luck next time!\n");
+    std::cout << "settext\n";
   }
   else if ( _player.getHomeHealth() <= 0 )
   {
-    std::cout << "Your base has been overun! Better luck next time!\n";
+    _creditsMSG.setText("Your base has been overun! Better luck next time!\n");
   }
   else
   {
-    std::cout << "You've quit the game.\n";
+    _creditsMSG.setText("You've quit the game.\n");
   }
 }
 
@@ -506,4 +508,9 @@ void Game::scavengeBuilding()
   {
     _player.changePlayerHealth( -( 10 + rand() % 3 ) );
   }
+}
+
+TextDisplay Game::getCreditsMSG()
+{
+  return _creditsMSG;
 }

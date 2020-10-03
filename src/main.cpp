@@ -16,11 +16,13 @@ int main()
   Renderer renderer( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT, 
                      id.kGRID_WIDTH, id.kGRID_HEIGHT );
   Controller controller;
+  TextDisplay creditsMSG( " testing", { 100, 100 } );
 
   while( status.running )
   {
     if( status.menuScreen )
     {
+      //TextDisplay title;
       MainMenu mainMenu( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT );
       mainMenu.Run( controller, renderer, id.kMsPerFrame, status );
     }
@@ -31,10 +33,11 @@ int main()
              id.leftPanelPD, id.topPanelPD,
              id.bottomPanelPD, id.mapPanelPD );
       game.Run( controller, renderer, id.kMsPerFrame, status );
+      creditsMSG = game.getCreditsMSG();
     }
     else if( status.creditScreen )
     {
-      Credits credits( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT );
+      Credits credits( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT, creditsMSG );
       credits.Run( controller, renderer, id.kMsPerFrame, status );
     }
   }

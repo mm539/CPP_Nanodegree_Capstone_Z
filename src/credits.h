@@ -14,7 +14,7 @@
 class Credits
 {
  public:
-  Credits( std::size_t screen_width, std::size_t screen_height );
+  Credits( std::size_t screen_width, std::size_t screen_height, TextDisplay &creditsMSG );
   void Run( Controller &controller,
             Renderer &renderer,
             std::size_t target_frame_duration,
@@ -27,6 +27,7 @@ class Credits
 
   std::size_t _screenWidth;
   std::size_t _screenHeight;
+  TextDisplay _credits;
 
   std::vector<Button> _buttons;
   ButtonSprite _clickedButtonSprite;

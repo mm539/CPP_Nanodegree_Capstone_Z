@@ -206,7 +206,7 @@ void GameStatsDisplay::setTopPanelWH( int width, int height )
   _gameStatsTextures._topPanel.setTextureWH( width, height );
 }
 
-/********* 3. Panel  *********/
+/********* 3. Panel Struct && Initialization dimensions  *********/
 
 void PanelPD::setPanelPD( int x, int y, int w, int h )
 {
@@ -215,8 +215,6 @@ void PanelPD::setPanelPD( int x, int y, int w, int h )
   int _w { w };
   int _h { h };
 }
-
-/********* 4. Initialization dimensions  *********/
 
 InitDimen::InitDimen()
 {
@@ -236,4 +234,33 @@ InitDimen::InitDimen()
                        kSCREEN_WIDTH - leftPanelWidth, bottomPanelHeight );
   mapPanelPD.setPanelPD( leftPanelWidth, topPanelHeight,
           kSCREEN_WIDTH - leftPanelWidth, kSCREEN_HEIGHT - topPanelHeight );*/
+}
+
+/********* 4. TextDisplay  *********/
+
+TextDisplay::TextDisplay( )
+{
+  _font = TTF_OpenFont( "../fonts/black-caps-font/BlackCapsRegular-wgA2.ttf", 16 );
+  if( _font == nullptr  ) std::cout<< "Failed to load _font. SDL_ttf Error:\n" << TTF_GetError() << std::endl;
+ }
+
+TextDisplay::TextDisplay( std::string text, SDL_Point position )
+{
+  _font = TTF_OpenFont( "../fonts/black-caps-font/BlackCapsRegular-wgA2.ttf", 16 );
+  if( _font == nullptr  ) std::cout<< "Failed to load _font. SDL_ttf Error:\n" << TTF_GetError() << std::endl;
+
+  _text = text;
+  _position = position;
+ }
+
+void TextDisplay::setText( std::string text )
+{
+  _text = text;
+}
+
+void TextDisplay::render( SDL_Renderer* rend )
+{
+  SDL_Color textColor = { 255, 255, 255 };
+  _LTexture.loadFromRenderedText( rend, _text, textColor, _font );
+  _LTexture.render( rend, _position, determineWidth( _text ), 60 );
 }

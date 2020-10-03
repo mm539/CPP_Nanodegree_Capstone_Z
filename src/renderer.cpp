@@ -81,7 +81,7 @@ void Renderer::renderAll( std::vector<std::shared_ptr<Building>>& buildings, Gam
   SDL_RenderPresent( _renderer );
 }
 
-void Renderer::renderAll( std::vector<Button>& buttons)
+void Renderer::renderAll( std::vector<Button>& buttons, TextDisplay &textDisplay )
 {
   // clear the screen
   SDL_SetRenderDrawColor( _renderer, 0x00, 0x00, 0x00, 0x00 );
@@ -102,6 +102,8 @@ void Renderer::renderAll( std::vector<Button>& buttons)
       buttonCounter++;
     }
   }
+
+  textDisplay.render( _renderer );
 
   // update the screen
   SDL_RenderPresent( _renderer );

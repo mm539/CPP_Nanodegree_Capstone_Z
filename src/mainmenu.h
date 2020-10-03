@@ -23,6 +23,7 @@ class MainMenu
  private:
   std::size_t _screenWidth;
   std::size_t _screenHeight;
+  TextDisplay _title;
 
   void makeButtons();
   void updateButtons();

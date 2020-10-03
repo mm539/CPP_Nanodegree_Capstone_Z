@@ -33,7 +33,7 @@ class LTexture
 
 };
 
-/********* 2. Overlay  *********/
+/********* 2. Game Stats Display  *********/
 
 struct GameStatsTextures // overlay textures
 {
@@ -101,7 +101,7 @@ class GameStatsDisplay
   GameStatsTextures _gameStatsTextures; // gameStatsTextures
 };
 
-/********* 3. Panel  *********/
+/********* 3. Panel Struct && Initialization Dimensions *********/
 
 struct PanelPD // Panel Position Dimensions
 {
@@ -114,8 +114,6 @@ struct PanelPD // Panel Position Dimensions
   int _w { 0 };
   int _h { 0 };
 };
-
-/********* 4. Initialization dimensions  *********/
 
 struct InitDimen
 {
@@ -138,6 +136,24 @@ struct InitDimen
   PanelPD topPanelPD;
   PanelPD bottomPanelPD;
   PanelPD mapPanelPD;
+};
+
+/********* 4. Generic Text Display  *********/
+
+class TextDisplay
+{
+ public:
+  TextDisplay(); // constructor
+  TextDisplay( std::string text, SDL_Point position);
+  ~TextDisplay(){} // destructor
+  void setText( std::string text );
+  void render( SDL_Renderer* rend );
+
+ private:
+  TTF_Font* _font = nullptr;
+  LTexture _LTexture;
+  SDL_Point _position;
+  std::string _text;
 };
 
 #endif

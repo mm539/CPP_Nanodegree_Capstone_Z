@@ -25,6 +25,7 @@ class Game
             Renderer &renderer,
             std::size_t target_frame_duration,
             Status &status );
+  TextDisplay getCreditsMSG();
 
  private:
   // constructor functions
@@ -68,6 +69,8 @@ class Game
   PanelPD _bottomPanel;
   PanelPD _topPanel;
   PanelPD _mapPanel;
+
+  TextDisplay _creditsMSG;
 };
 
 #endif

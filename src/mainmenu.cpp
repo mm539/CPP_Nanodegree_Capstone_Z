@@ -4,6 +4,7 @@
 MainMenu::MainMenu( std::size_t screen_width, std::size_t screen_height ) :
   _screenWidth( screen_width ), _screenHeight( screen_height )
 {
+  _title = TextDisplay( "Z", { 300, 200 } );
   makeButtons();
 }
 
@@ -23,7 +24,7 @@ void MainMenu::Run( Controller const &controller,
     // INPUTE UPDATE RENDER
     controller.handleEvent( status.running, _buttons, _clickedButtonSprite );
     update( status );
-    renderer.renderAll( _buttons );
+    renderer.renderAll( _buttons, _title );
 
     frame_end = SDL_GetTicks();
     frame_duration = frame_end - frame_start;

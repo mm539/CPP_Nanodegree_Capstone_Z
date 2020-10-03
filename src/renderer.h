@@ -17,7 +17,7 @@ class Renderer
   ~Renderer();
 
   void renderAll( std::vector<std::shared_ptr<Building>>& buildings, GameStatsDisplay& stats, std::vector<Button>& buttons, Player& player );
-  void renderAll( std::vector<Button> &buttons );
+  void renderAll( std::vector<Button> &buttons, TextDisplay &textDisplay );
 
  private:
   SDL_Window* _window;

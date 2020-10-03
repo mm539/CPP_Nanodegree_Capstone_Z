@@ -1,7 +1,7 @@
 #include "credits.h"
 
-Credits::Credits( std::size_t screen_width, std::size_t screen_height ) :
-  _screenWidth( screen_width ), _screenHeight( screen_height )
+Credits::Credits( std::size_t screen_width, std::size_t screen_height, TextDisplay &creditsMSG ) :
+  _screenWidth( screen_width ), _screenHeight( screen_height ), _credits( creditsMSG )
 {
   makeButtons();
 }
@@ -22,7 +22,7 @@ void Credits::Run( Controller &controller,
     // INPUT UPDATE RENDER
     controller.handleEvent( status.running, _buttons, _clickedButtonSprite );
     update( status );
-    renderer.renderAll( _buttons );
+    renderer.renderAll( _buttons, _credits );
 
     frame_end = SDL_GetTicks();
     frame_duration = frame_start - frame_end;
