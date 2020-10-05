@@ -88,60 +88,67 @@ void Game::makeBuildings()
   srand( time( NULL ) );
   int rando = rand() % 2;
   _homeID = ( ( x * y ) / 2 + 3 ) + rando; // set location of home base
+  int id, xPos, yPos;
+  BuildingSprite sprite;
+  std::string imgPath;
+  int food, materials, danger;
+  bool build;
   
   for( int i = 0; i < y; i++ )
   {
     for( int j = 0; j < x; j++ )
     {
-      if( ( i * y + j ) == _homeID )
+      id = i * y + j;
+      xPos = _leftPanel._w + j * _gridWidth;
+      yPos = _topPanel._h + i * _gridHeight;
+      build = true;
+
+      if( id == _homeID )
+      {
+        sprite = BuildingSprite::BUILDING_SPRITE_HOME;
+        imgPath = "../img/buildings-home128.bmp";
+        food = 0, materials = 0, danger = 0;
+      }
+      else if( ( rand() % 12 ) <= 7 )
+      {
+        sprite = BuildingSprite::BUILDING_SPRITE_HOUSE;
+        imgPath = "../img/buildings-house128.bmp";
+        food = 10 + rand() % 6;
+        materials = 10 + rand() % 6;
+        danger = 5 + rand() % 10;
+      }
+      else if( ( rand() % 12 ) <= 3 )
+      {
+        sprite = BuildingSprite::BUILDING_SPRITE_HSTORE;
+        imgPath = "../img/buildings-hstore128.bmp";
+        food = 0;
+        materials = 15 + rand() % 12;
+        danger = 15 + rand() % 10;
+      }
+      else if( ( rand() % 12 ) <= 3 )
+      {
+        sprite = BuildingSprite::BUILDING_SPRITE_CSTORE;
+        imgPath = "../img/buildings-cstore128.bmp";
+        food = 15 + rand() % 12;
+        materials = 0;
+        danger = 15 + rand() % 10;
+      }
+      else if( ( rand() % 12 ) <= 3 )
+      {
+        build = false;
+      }
+
+      if( build )
       {
         _buildings.emplace_back( 
-        std::shared_ptr<Building> ( new Building( i * y + j,
-                  BUILDING_SPRITE_HOME,
-                  _gridWidth , _gridHeight,
-                  _leftPanel._w + j * _gridWidth, _topPanel._h + i * _gridHeight,
-                  "../img/buildings-home128.bmp", 0, 0, 0) )  // int food, int materials, int dangerLevel
+          std::shared_ptr<Building> (
+          new Building( id, sprite,
+          _gridWidth , _gridHeight, xPos, yPos,
+          imgPath, food, materials, danger ) )
         );
-        _clickedBuilding = _buildings.back();
       }
-      else if( ( rand() % 4 ) <= 2 )
-      {
-        if( ( rand() % 11 ) <= 7 ) 
-        {
-          _buildings.emplace_back( 
-          std::shared_ptr<Building> ( new Building( i * y + j,
-                  BUILDING_SPRITE_HOUSE,
-                  _gridWidth , _gridHeight,
-                  _leftPanel._w + j * _gridWidth, _topPanel._h + i * _gridHeight,
-                  "../img/buildings-house128.bmp",
-                  10 + rand() % 6, 10 + rand() % 6, 15 + rand() % 10 ) ) // int food, int materials, int dangerLevel
-          );
-        }
-        else if( rand() % 3 <= 1 )
-        {
-          _buildings.emplace_back( 
-          std::shared_ptr<Building> ( new Building( i * y + j,
-                  BUILDING_SPRITE_HSTORE,
-                  _gridWidth , _gridHeight,
-                  _leftPanel._w + j * _gridWidth, _topPanel._h + i * _gridHeight,
-                  "../img/buildings-hstore128.bmp",
-                  0, 15 + rand() % 30, 20 + rand() % 10 ) )
-          );
-        }
-        else
-        {
-          _buildings.emplace_back( 
-          std::shared_ptr<Building> ( new Building( i * y + j,
-                  BUILDING_SPRITE_CSTORE,
-                  _gridWidth , _gridHeight,
-                  _leftPanel._w + j * _gridWidth, _topPanel._h + i * _gridHeight,
-                  "../img/buildings-cstore128.bmp",
-                  15 + rand() % 30, 0, 20 + rand() % 10 ) )
-          );
-        }
-        
-      }
-      
+
+      if( id == _homeID ) _clickedBuilding = _buildings.back();
     }
   }
 }
