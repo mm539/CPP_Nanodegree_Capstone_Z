@@ -20,7 +20,7 @@ Game::Game(int screen_width, int screen_height,
   makeGSD(); // GameStatsDisplay
   makeButtons();
   makePlayer();
-  _winTime = 24 * 4 + 24 * ( rand() % 3 ) + 9;
+  _gameTime.setHours( 6 );
 }
 
 
@@ -60,7 +60,7 @@ void Game::Run( Controller const &controller,
 
 void Game::endGame()
 {
-  if ( _player.getPlayerHealth() > 0 && _player.getHomeHealth() > 0 && _time >= _winTime )
+  if ( _player.getPlayerHealth() > 0 && _player.getHomeHealth() > 0 && _gameTime.winTimeMet() )
   {
     _creditsMSG.setText("You hear the sound of gunfire quickly approaching your location. As quickly as you can, you use your shirt and a long branch on the ground nearby to make a white flag to wave in the air. In the distance you hear faint shouts of what sounds like \"We've got another survivor! We've got another survivor!\" Soon, the soldiers make it to your location and beckon you onto a truck with what appears to be more survivors.\n  Congratulations! You survived!\n");
   }
@@ -198,29 +198,29 @@ void Game::update( Status &status )
   }
 
   // if time is 5:00am, consume some food. if not enought food, then take dmg. set time to 6:00am
-  if( (_time % 24 ) == 5 )
+  if( _gameTime.getHours() == 5 )
   {
     if( _player.getHomeFood() > 10 )
     {
       _player.changeHomeFood( -10 );
     }
     else _player.changePlayerHealth( -20 );
-    _time = _time + 1;
+    _gameTime.addTime( 1 );
   }
 
   // if time is midnight, return player home and initiate a zombie attack, then set time to 5:00am
-  if( ( _time % 24 ) == 0 )
+  if( _gameTime.getHours() >= 0 && _gameTime.getHours() <= 4 )
   {
     SDL_Point pos = getBuildingCoord( _homeID );
     _player.setLocationID( _homeID );
     _player.setPosition( pos.x, pos.y );
     _player.changeHomeHealth( -( 5 + rand() % 25 ) );
     _actionResultText = "6:00 : returned home. zombies attacked.";
-    _time = _time + 5;
+    _gameTime.addTime( 5 );
   }
 
   // check if player has finished the game
-  if( _player.getPlayerHealth() <= 0 || _player.getHomeHealth() <= 0 || _time >= _winTime )
+  if( _player.getPlayerHealth() <= 0 || _player.getHomeHealth() <= 0 || _gameTime.winTimeMet() )
   {
     status.gameScreen = false;
     status.creditScreen = true;
@@ -232,56 +232,63 @@ void Game::buttonAction()
   switch ( _clickedButtonSprite )
   {
   case ButtonSprite::BUTTON_SPRITE_REST:
-    _actionResultText = std::to_string( _time % 24 ) + " :00 : Rested for an hour.";
-    _time = _time + 1;
+    _actionResultText = _gameTime.getActionMsg( " Rested for an hour. ");
+    _gameTime.addTime( 1 );
     _player.changePlayerHealth( 5 );
     break;
 
   case ButtonSprite::BUTTON_SPRITE_REPAIR:
-    _actionResultText = std::to_string( _time % 24 ) + " :00 : Repaired defenses for an hour.";
-    _time = _time + 1;
+    _actionResultText = _gameTime.getActionMsg( " Repaired defenses for an hour. ");
+    _gameTime.addTime( 1 );
     _player.changeHomeHealth( 10 );
     _player.changeHomeMaterials( - 5 );
     break;
 
   case ButtonSprite::BUTTON_SPRITE_GO:
-    if( computeTravelTime() + _time % 24 <= 24 && ( computeTravelTime() + _time - 1 ) / 24 == _time / 24 )
+    if( computeTravelTime() + _gameTime.getHours() <= 24 ) 
      {
-       _actionResultText = std::to_string( _time % 24 ) + " :00 : traveled to a building.";
-       _time = _time + computeTravelTime();    
+       _actionResultText = _gameTime.getActionMsg( " Traveled to a building. ");
+       _gameTime.addTime( computeTravelTime() ) ;
        _player.setPosition( _clickedBuilding->getBuildingCoord().x, _clickedBuilding->getBuildingCoord().y );
        _player.setLocationID( _clickedBuilding->getID() );
      }
      else
      {
-       _actionResultText = std::to_string( _time % 24 ) + " :00 : Didn't go. Location is too far.";
+       _actionResultText =  _gameTime.getActionMsg( " Didn't go to location. Too far. ");
      }
      
     break;
 
   case ButtonSprite::BUTTON_SPRITE_GO_HOME:
-    _actionResultText = std::to_string( _time % 24 ) + " :00 : traveled home.";
-    _time = _time + computeTravelTime();
-    _player.setPosition( _clickedBuilding->getBuildingCoord().x, _clickedBuilding->getBuildingCoord().y );
-     _player.setLocationID( _clickedBuilding->getID() );
+    if( computeTravelTime() + _gameTime.getHours() <= 24 )
+    {
+      _actionResultText = _gameTime.getActionMsg( " Went home. ");
+      _gameTime.addTime( computeTravelTime() ) ;
+      _player.setPosition( _clickedBuilding->getBuildingCoord().x, _clickedBuilding->getBuildingCoord().y );
+      _player.setLocationID( _clickedBuilding->getID() );
+    }
+    else
+    {
+      _actionResultText =  _gameTime.getActionMsg( " Didn't go home. Go to a closer location first. ");
+    }
     break;
 // the next three cases use buildingStatus
   case ButtonSprite::BUTTON_SPRITE_SCOUT:
-    _actionResultText = std::to_string( _time % 24 ) + " :00 : scouted.";
-    _time = _time + 1;
+    _actionResultText = _gameTime.getActionMsg( " Scouted for an hour. ");
+    _gameTime.addTime( 1 );
     _clickedBuilding->changeScouted( true );
     break;
 
   case ButtonSprite::BUTTON_SPRITE_CLEAR:
     clearBuilding();
-    _actionResultText = std::to_string( _time % 24 ) + " :00 : cleared some Zs";
-    _time = _time + 1;
+    _actionResultText = _gameTime.getActionMsg( " Cleared some Zs. ");
+    _gameTime.addTime( 1 );
     break;
 
   case ButtonSprite::BUTTON_SPRITE_SCAVENGE:
     scavengeBuilding();
-    _actionResultText = std::to_string( _time % 24 ) + " :00 : scavenged.";
-    _time = _time + 1;
+    _actionResultText = _gameTime.getActionMsg( " Scavenged. ");
+    _gameTime.addTime( 1 );
     break;
 
   
@@ -380,7 +387,10 @@ void Game::updateButtons()
 void Game::updateGSD()
 {
   // time
-  _gameStatsDisplay._gameStatsTexts._clockText = "Day : " + std::to_string( _time / 24 ) + "  Time : " + std::to_string( _time % 24 ) + " : 00";
+  _gameStatsDisplay._gameStatsTexts._clockText = 
+    "Day : " + std::to_string( _gameTime.getDays() ) + 
+    " Time : " + std::to_string( _gameTime.getHours() ) + 
+    " : " + _gameTime.getMinutesS() ;
   _gameStatsDisplay._gameStatsTexts._buildingText = std::to_string( 999 );
 
   // player stats
@@ -519,4 +529,110 @@ void Game::scavengeBuilding()
 TextDisplay Game::getCreditsMSG()
 {
   return _creditsMSG;
+}
+
+GameTime::GameTime()
+{
+  _winTime = 24 * 4 + 24 * ( rand() % 3 ) + 9;
+}
+GameTime::GameTime( int days, int hours, int minutes )
+{
+  setDays( days );
+  setHours( hours );
+  setMinutes( minutes );
+  _winTime = 24 * 4 + 24 * ( rand() % 3 ) + 9;
+}
+
+void GameTime::setDays( int days )
+{
+  _days = days;
+}
+
+void GameTime::setHours( int hours )
+{
+  _hours = hours;
+}
+
+void GameTime::setMinutes( int minutes )
+{
+  _minutes = minutes;
+}
+
+void GameTime::addTime( float time ) // time in hours
+{
+  int hours = time;
+  int minutes = ( time - hours ) * 60; // ( 22.4 - 22 ) * 60
+  int minuteHolder = _minutes + minutes;
+  int hourHolder = _hours + hours;
+
+  // add minutes
+  if( minuteHolder >= 60 )
+  {
+    hourHolder++;
+    _minutes = _minutes + minutes - 60;
+  }
+  else
+  {
+    _minutes = _minutes + minutes;
+  }
+
+  // add hours
+  if( hourHolder >= 24 )
+  {
+    _days++;
+    _hours = _hours + hours - 24;
+  }
+  else
+  {
+    _hours = _hours + hours;
+  }
+  
+  
+}
+
+int GameTime::getDays()
+{
+  return _days;
+}
+
+int GameTime::getHours()
+{
+  return _hours;
+}
+
+int GameTime::getMinutes()
+{
+  return _minutes;
+}
+
+float GameTime::getMinutesD()
+{
+  float minutes = _minutes / 60;
+  return minutes;
+}
+
+bool GameTime::winTimeMet()
+{
+  float m = _minutes / 60 ;
+  float time = _days * 24 + _hours + m;
+  if( time >= _winTime ) return true;
+  return false;
+}
+
+std::string GameTime::getActionMsg( std::string action )
+{
+  std::string msg = 
+    std::to_string( _hours ) + " : " +
+    getMinutesS() + " : " + action;
+  return msg;
+}
+
+std::string GameTime::getMinutesS()
+{
+  std::string m = std::to_string( _minutes );
+  if( m.length() == 1 )
+  {
+    m = "0" + m;
+  }
+  return m;
 }

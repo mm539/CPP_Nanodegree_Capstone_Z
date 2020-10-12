@@ -10,6 +10,33 @@
 #include <vector>
 #include <memory>
 
+class GameTime
+{
+ public:
+  GameTime();
+  GameTime( int days, int hours, int minutes );
+
+  void addTime( float time );
+  int getDays();
+  int getHours();
+  int getMinutes();
+  float getMinutesD();
+  std::string getMinutesS();
+
+  void setDays( int days );
+  void setHours( int hours );
+  void setMinutes( int minutes );
+
+  bool winTimeMet();
+  std::string getActionMsg( std::string );
+
+ private:
+  int _hours{ 0 };
+  int _minutes{ 0 };
+  int _days{ 0 };
+  float _winTime;
+};
+
 class Game
 {
  public:
@@ -39,7 +66,7 @@ class Game
   void update( Status &status );
   void buttonAction();
   void updateButtons();
-  void updateGSD();
+  void updateGSD(); // GameStatsDisplay
   void clearBuilding();
   void scavengeBuilding();
   int computeTravelTime();
@@ -53,8 +80,7 @@ class Game
 
   ButtonSprite _clickedButtonSprite; // the most recently clicked button
   std::shared_ptr<Building> _clickedBuilding;
-  int _time { 6 }; // game time. hours.
-  int _winTime; // how many hours a player must survive to win the game.
+  GameTime _gameTime; // game time. hours, minutes
   int _homeID; // the id of the home building
 
   // display information
@@ -72,5 +98,7 @@ class Game
 
   TextDisplay _creditsMSG;
 };
+
+
 
 #endif
