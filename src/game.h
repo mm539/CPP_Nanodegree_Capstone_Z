@@ -69,7 +69,7 @@ class Game
   void updateGSD(); // GameStatsDisplay
   void clearBuilding();
   void scavengeBuilding();
-  int computeTravelTime();
+  float computeTravelTime();
 
   SDL_Point getBuildingCoord( int id );
 

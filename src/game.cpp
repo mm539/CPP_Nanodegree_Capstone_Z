@@ -205,7 +205,8 @@ void Game::update( Status &status )
       _player.changeHomeFood( -10 );
     }
     else _player.changePlayerHealth( -20 );
-    _gameTime.addTime( 1 );
+    _gameTime.setHours( 6 );
+    _gameTime.setMinutes( 0 );
   }
 
   // if time is midnight, return player home and initiate a zombie attack, then set time to 5:00am
@@ -216,7 +217,7 @@ void Game::update( Status &status )
     _player.setPosition( pos.x, pos.y );
     _player.changeHomeHealth( -( 5 + rand() % 25 ) );
     _actionResultText = "6:00 : returned home. zombies attacked.";
-    _gameTime.addTime( 5 );
+    _gameTime.setHours( 5 );
   }
 
   // check if player has finished the game
@@ -435,15 +436,15 @@ SDL_Point Game::getBuildingCoord( int id )
   return SDL_Point( { 0 , 0 } );
 }
 
-int Game::computeTravelTime()
+float Game::computeTravelTime()
 {
   SDL_Point buildingCoord = _clickedBuilding->getBuildingCoord();
+  SDL_Point playerCoord = _player.getPosition();
 
-  int xDif = abs( _player.getPosition().x - buildingCoord.x );
-  int yDif = abs( _player.getPosition().y - buildingCoord.y );
-  
+  float xDiffSqd = pow( ( playerCoord.x - buildingCoord.x ) / _gridWidth, 2) ;
+  float yDiffSqd = pow( ( playerCoord.y - buildingCoord.y ) / _gridHeight, 2 );
 
-  return xDif > yDif ? xDif / _gridWidth : yDif / _gridHeight;
+  return sqrt( xDiffSqd + yDiffSqd );
 }
 
 void Game::clearBuilding()
