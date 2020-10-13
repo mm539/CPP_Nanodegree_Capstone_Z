@@ -76,6 +76,14 @@ void Button::render(SDL_Renderer* rend)
   {
     _LTexture.setColor( 0x7f, 0x7f, 0x7f );
   }
+  else if( _mouseState == CSMouseState::STATE_MOUSE_OVER )
+  {
+    _LTexture.setColor( 0x46, 0xcf, 0x1b ); 
+  }
+  else if( _mouseState == CSMouseState::STATE_MOUSE_DOWN )
+  {
+    _LTexture.setColor( 0x12, 0x88, 0x12 ); 
+  }
   _LTexture.render( rend , _position, _width, _height );
 }
 
@@ -132,14 +140,24 @@ void Building::render(SDL_Renderer* rend)
 {
   
   _LTexture.loadTextureFromBMP( rend, _imgPath );
-  _LTexture.render( rend , _position, _width, _height );
   if( _selected == true )
   {
+    _LTexture.render( rend , _position, _width, _height );
     _LTexture.setTextureWH( _width, _height );
     _LTexture.setBlendModeForDraw( rend, SDL_BLENDMODE_BLEND );
     _LTexture.setAlpha( 0 );
-    _LTexture.renderRect( rend, _position, { 128, 0, 128, 56 } );
+    _LTexture.renderRect( rend, _position, { 128, 0, 128, 112 } );
   }
+  else if( _mouseState == CSMouseState::STATE_MOUSE_OVER)
+  {
+    _LTexture.setColor( 0xdd, 0xb1, 0xd9 ); 
+    _LTexture.render( rend , _position, _width, _height );
+  }
+  else
+  {
+    _LTexture.render( rend , _position, _width, _height );
+  }
+  
 }
 
 // functions for accessing food, materials, danger level, and scouted
