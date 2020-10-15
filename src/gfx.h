@@ -34,31 +34,29 @@ class LTexture
 
 };
 
-/********* 2. Game Stats Display  *********/
+/********* 2. Generic Text Display  *********/
 
-struct GameStatsTextures // overlay textures
+class TextDisplay
 {
-  LTexture _clockT;
+ public:
+  TextDisplay(); // constructor
+  TextDisplay( std::string text, SDL_Point position);
+  ~TextDisplay(){} // destructor
+  void setText( std::string text );
+  void setTextureWH( int width, int height );
+  void render( SDL_Renderer* rend );
+  void render( SDL_Renderer* rend, SDL_Point position);
 
-  LTexture _selectedBuildingT;
-
-  LTexture _playerHealthT;
-  LTexture _playerFoodT;
-  LTexture _playerMaterialsT;
-  
-  LTexture _homeHealthT;
-  LTexture _homeFoodT;
-  LTexture _homeMaterialsT;
-
-  LTexture _buildingFoodT;
-  LTexture _buildingMaterialsT;
-  LTexture _buildingScoutedT;
-  LTexture _buildingDangerT;
-
-  LTexture _leftPanel;
-  LTexture _topPanel;
-  LTexture _bottomPanel;
+ private:
+  TTF_Font* _font = nullptr;
+  LTexture _LTexture;
+  SDL_Point _position;
+  SDL_Color _textColor { 255, 255, 255 };
+  int _textHeight { 40 };
+  std::string _text;
 };
+
+/********* 3. Game Stats Display  *********/
 
 struct GameStatsTexts
 {
@@ -99,10 +97,30 @@ class GameStatsDisplay
 
  private:
   TTF_Font* _font = nullptr;
-  GameStatsTextures _gameStatsTextures; // gameStatsTextures
+  // GameStatsDisplays _gameStatsDisplays; // gameStatsTextures
+  TextDisplay _clockD;
+
+  TextDisplay _selectedBuildingD;
+
+  TextDisplay _playerHealthD;
+  TextDisplay _playerFoodD;
+  TextDisplay _playerMaterialsD;
+  
+  TextDisplay _homeHealthD;
+  TextDisplay _homeFoodD;
+  TextDisplay _homeMaterialsD;
+
+  TextDisplay _buildingFoodD;
+  TextDisplay _buildingMaterialsD;
+  TextDisplay _buildingScoutedD;
+  TextDisplay _buildingDangerD;
+
+  LTexture _leftPanel;
+  LTexture _topPanel;
+  TextDisplay _bottomPanel;
 };
 
-/********* 3. Panel Struct && Initialization Dimensions *********/
+/********* 4. Panel Struct && Initialization Dimensions *********/
 
 struct PanelPD // Panel Position Dimensions
 {
@@ -139,22 +157,5 @@ struct InitDimen
   PanelPD mapPanelPD;
 };
 
-/********* 4. Generic Text Display  *********/
-
-class TextDisplay
-{
- public:
-  TextDisplay(); // constructor
-  TextDisplay( std::string text, SDL_Point position);
-  ~TextDisplay(){} // destructor
-  void setText( std::string text );
-  void render( SDL_Renderer* rend );
-
- private:
-  TTF_Font* _font = nullptr;
-  LTexture _LTexture;
-  SDL_Point _position;
-  std::string _text;
-};
 
 #endif

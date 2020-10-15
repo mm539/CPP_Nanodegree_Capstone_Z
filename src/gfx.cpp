@@ -146,69 +146,69 @@ int determineWidth( std::string &text )
 void GameStatsDisplay::render( SDL_Renderer* rend )
 {
   // 1. render left panel
-  _gameStatsTextures._leftPanel.renderRect( rend, {0, 0}, { 0x40, 0x31, 0x0A ,0xFF } );
+  _leftPanel.renderRect( rend, {0, 0}, { 0x40, 0x31, 0x0A ,0xFF } );
 
   // 2. render game and base info
   SDL_Color textColor = { 255, 255, 255 };
 
-  _gameStatsTextures._clockT.loadFromRenderedText( rend, _gameStatsTexts._clockText, textColor, _font );
-  _gameStatsTextures._clockT.render( rend, { 400 , 5 }, determineWidth( _gameStatsTexts._clockText ), 50 );
+  _clockD.setText( _gameStatsTexts._clockText );
+  _clockD.render( rend, { 400 , 5 } );
 
-  _gameStatsTextures._homeHealthT.loadFromRenderedText( rend, _gameStatsTexts._homeHealthText, textColor, _font );
-  _gameStatsTextures._homeHealthT.render( rend, { 250 , 60 }, determineWidth( _gameStatsTexts._homeHealthText ), 40 );
+  _homeHealthD.setText( _gameStatsTexts._homeHealthText );
+  _homeHealthD.render( rend, { 250 , 60 } );
 
-  _gameStatsTextures._homeFoodT.loadFromRenderedText( rend, _gameStatsTexts._homeFoodText, textColor, _font );
-  _gameStatsTextures._homeFoodT.render( rend, { 530 , 60 }, determineWidth( _gameStatsTexts._homeFoodText ), 40 );
+  _homeFoodD.setText( _gameStatsTexts._homeFoodText );
+  _homeFoodD.render( rend, { 530 , 60 } );
 
-  _gameStatsTextures._homeMaterialsT.loadFromRenderedText( rend, _gameStatsTexts._homeMaterialsText, textColor, _font );
-  _gameStatsTextures._homeMaterialsT.render( rend, { 740 , 60 }, determineWidth( _gameStatsTexts._homeMaterialsText ), 40 );
+  _homeMaterialsD.setText( _gameStatsTexts._homeMaterialsText );
+  _homeMaterialsD.render( rend, { 740 , 60 } );
 
   // 3. render player info
   textColor = { 0xa6, 0xa5, 0xa2 };
 
-  _gameStatsTextures._playerHealthT.loadFromRenderedText( rend, _gameStatsTexts._playerHealthText, textColor, _font );
-  _gameStatsTextures._playerHealthT.render( rend, { 20 , 100 }, determineWidth( _gameStatsTexts._playerHealthText ), 40 );
+  _playerHealthD.setText( _gameStatsTexts._playerHealthText );
+  _playerHealthD.render( rend, { 20 , 100 } );
 
-  _gameStatsTextures._playerFoodT.loadFromRenderedText( rend, _gameStatsTexts._playerFoodText, textColor, _font );
-  _gameStatsTextures._playerFoodT.render( rend, { 20 , 160 }, determineWidth( _gameStatsTexts._playerFoodText ), 40 );
+  _playerFoodD.setText( _gameStatsTexts._playerFoodText );
+  _playerFoodD.render( rend, { 20 , 160 } );
 
-  _gameStatsTextures._playerMaterialsT.loadFromRenderedText( rend, _gameStatsTexts._playerMaterialsText, textColor, _font );
-  _gameStatsTextures._playerMaterialsT.render( rend, { 20 , 220 }, determineWidth( _gameStatsTexts._playerMaterialsText ), 40 );
+  _playerMaterialsD.setText( _gameStatsTexts._playerMaterialsText );
+  _playerMaterialsD.render( rend, { 20 , 220 } );
 
   // 4. render bottom panel ( result of a button click )
   textColor = { 0xff, 0xcb, 0x3d };
-  _gameStatsTextures._bottomPanel.loadFromRenderedText( rend, _gameStatsTexts._actionResultText, textColor, _font );
-  _gameStatsTextures._bottomPanel.render( rend, { 270, 820 }, determineWidth( _gameStatsTexts._actionResultText ), 40);
+  _bottomPanel.setText( _gameStatsTexts._actionResultText );
+  _bottomPanel.render( rend, { 270, 820 } );
 
   // 5. render building info
   textColor = { 0xc4, 0x66, 0x66 };
-  _gameStatsTextures._buildingScoutedT.loadFromRenderedText( rend, _gameStatsTexts._buildingScoutedText, textColor, _font );
-  _gameStatsTextures._buildingScoutedT.render( rend, { 20, 700 }, determineWidth( _gameStatsTexts._buildingScoutedText ), 40 );
+  _buildingScoutedD.setText( _gameStatsTexts._buildingScoutedText );
+  _buildingScoutedD.render( rend, { 20, 700 } );
 
-  _gameStatsTextures._buildingDangerT.loadFromRenderedText( rend, _gameStatsTexts._buildingDangerText, textColor, _font );
-  _gameStatsTextures._buildingDangerT.render( rend, { 20, 760 }, determineWidth( _gameStatsTexts._buildingDangerText ), 40 );
+  _buildingDangerD.setText( _gameStatsTexts._buildingDangerText );
+  _buildingDangerD.render( rend, { 20, 760 } );
 
-  _gameStatsTextures._buildingFoodT.loadFromRenderedText( rend, _gameStatsTexts._buildingFoodText, textColor, _font );
-  _gameStatsTextures._buildingFoodT.render( rend, { 20, 800 }, determineWidth( _gameStatsTexts._buildingFoodText ), 40 );
+  _buildingFoodD.setText( _gameStatsTexts._buildingFoodText );
+  _buildingFoodD.render( rend, { 20, 800 } );
 
-  _gameStatsTextures._buildingMaterialsT.loadFromRenderedText( rend, _gameStatsTexts._buildingMaterialsText, textColor, _font );
-  _gameStatsTextures._buildingMaterialsT.render( rend, { 20, 840 }, determineWidth( _gameStatsTexts._buildingMaterialsText ), 40 );
+  _buildingMaterialsD.setText( _gameStatsTexts._buildingMaterialsText );
+  _buildingMaterialsD.render( rend, { 20, 840 } );
 
 }
 
 void GameStatsDisplay::setLeftPanelWH( int width, int height )
 {
-  _gameStatsTextures._leftPanel.setTextureWH( width, height );
+  _leftPanel.setTextureWH( width, height );
 }
 
 void GameStatsDisplay::setBottomPanelWH( int width, int height )
 {
-  _gameStatsTextures._bottomPanel.setTextureWH( width, height );
+  _bottomPanel.setTextureWH( width, height );
 }
 
 void GameStatsDisplay::setTopPanelWH( int width, int height )
 {
-  _gameStatsTextures._topPanel.setTextureWH( width, height );
+  _topPanel.setTextureWH( width, height );
 }
 
 /********* 3. Panel Struct && Initialization dimensions  *********/
@@ -263,9 +263,19 @@ void TextDisplay::setText( std::string text )
   _text = text;
 }
 
+void TextDisplay::setTextureWH( int width, int height )
+{
+  _LTexture.setTextureWH( width, height );
+}
+
 void TextDisplay::render( SDL_Renderer* rend )
 {
-  SDL_Color textColor = { 255, 255, 255 };
-  _LTexture.loadFromRenderedText( rend, _text, textColor, _font );
-  _LTexture.render( rend, _position, determineWidth( _text ), 60 );
+  _LTexture.loadFromRenderedText( rend, _text, _textColor, _font );
+  _LTexture.render( rend, _position, determineWidth( _text ), _textHeight );
+}
+
+void TextDisplay::render( SDL_Renderer* rend, SDL_Point position )
+{
+  _LTexture.loadFromRenderedText( rend, _text, _textColor, _font );
+  _LTexture.render( rend, position, determineWidth( _text ), _textHeight );
 }
