@@ -1,4 +1,6 @@
-This project was created as my capstone project for the Udacity C++ Nanodegree I'm taking. My objective is to create a game.
+This project was created as my capstone project for the Udacity C++ Nanodegree I took. My objective was to create a game. The first version I submitted was a buggy and incomplete game, but it was enough to satisfy the basic requirements. After I submitted the project I made some further improvements but since then I've switched gears and started learning how to use Unreal Engine 4. 
+
+This game is still buggy and incomplete, and will probably remain so. I keep at as something that will be sporadically updated whenever I went to practice and hone my fundamental c++ skills.
 
 ## Dependencies
 * cmake >= 3.7
@@ -26,25 +28,22 @@ I was only able to run this project on Windows Subsystem for Linux (WSL) and the
 
 ## Project Selection
 
-I decided to build a game.
-
-The player has a single survivor, as indicated by a blue token. The player must survive for an unknown number of days by scavenging for food and materials in buildings throughout the map.
+This is a very basic game. The player has a single survivor, as indicated by a blue token. The player must survive for an unknown number of days by scavenging for food and materials in buildings throughout the map. If the player doesn't have food, then he will start to lose health over time. If the player doesn't have materials, then player can't repair their home building. If the player's home building is destroyed, the player loses.
 
 ## File and Class Structure
 
-This game uses the same model as the Udacity Snake Game project. It uses the input, update, render model. The main classes are Game, Controller, and Renderer. The main.cpp file creates instances of these objects and then Game.run method is run with the other two instsances as parameters. The Game.run method has the main while loop, during which user input is detected, game attributes are updated, and graphics are rendered.
+This game uses the same model as the Udacity Snake Game project. It uses the input, update, render model. The main classes are Game, Controller, and Renderer. The main.cpp file creates instances of these objects and then the Game.run method is called with the Conroller and Renderer objects as parameters. The Game.run method has the main while loop, during which user input is detected, game attributes are updated, and graphics are rendered.
 
 Many of the Game class's attributes are instances of many of the other classes found in the other files of the project, such as Player, Overlay, a vector of Buildings, a vector of Buttons, etc.
 
-Upon startup, a window should open. This window should have four parts. The left panel, the top panel, the bottom panel, and the map on which buildings and player tokens are visible. All input is handled via clicks.
+Upon startup, a window should open. This window should have four parts. The left panel, the top panel, the bottom panel, and the map on which buildings and player token are visible. All input is handled via clicks.
 
-The left panel shows information about the clicked on building, the player, and the buttons.
+* The **left panel** shows information about the clicked on building, the player, and the buttons.
 
-The top panel shows information about day, time, and base resources.
+* The **top panel** shows information about day, time, and base resources.
 
-The bottom panel shows information about the most recently performed action.
+* The **bottom panel** shows information about the most recently performed action.
 
-Upon game termination, a message ????????????
 
 ## Rubric Points
 
@@ -69,8 +68,7 @@ As per the project requirements, this section of the README will indicate (at le
 
  5. The project uses smart pointers instead of raw pointers.
  * The project uses at least one smart pointer: unique_ptr, shared_ptr, or weak_ptr. The project does not use raw pointers.
- * example: The Game class has an attribute _buildings (buildings.h, line 45) that uses a vector of shared pointers.
- * The project does use some raw pointers, but only when using the SDL Library. 
+ * example: The Game class has an attribute _buildings (buildings.h, line 45) that uses a vector of shared pointers. Technically, the project does use some raw pointers, but only when using the SDL Library (which I assume has its mechanisms for garbage collection). 
 
 ## Attributions
 
