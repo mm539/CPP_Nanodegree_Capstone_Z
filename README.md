@@ -1,6 +1,4 @@
-This project was created as my capstone project for the Udacity C++ Nanodegree I took. My objective was to create a game. The first version I submitted was a buggy and incomplete game, but it was enough to satisfy the basic requirements. After I submitted the project I made some further improvements but since then I've switched gears and started learning how to use Unreal Engine 4. 
-
-This game is still buggy and incomplete, and will probably remain so. I keep at as something that will be sporadically updated whenever I went to practice and hone my fundamental c++ skills.
+This is my capstone project for the Udacity C++ Nanodegree program I took in 2020. It is a game.
 
 ## Dependencies
 * cmake >= 3.7
@@ -17,7 +15,11 @@ This game is still buggy and incomplete, and will probably remain so. I keep at 
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
   * Windows: recommend using [MinGW](http://www.mingw.org/)
 
-I was only able to run this project on Windows Subsystem for Linux (WSL) and the Udacity-provided environment. I was never able to run this project on Windows because I couldn't figure out how to make a CMakeLists.txt file that could successfully run on Windows. I never tried to run this project on Mac.
+I was only able to build this project on Windows Subsystem for Linux (WSL).
+
+I was never able to run this project on Windows because of problems with dependencies and making a proper CMakeLists.txt file. 
+
+I never tried to run this project on Mac.
 
 ## Basic Build Instructions
 
@@ -28,7 +30,7 @@ I was only able to run this project on Windows Subsystem for Linux (WSL) and the
 
 ## Project Selection
 
-This is a very basic game. The player has a single survivor, as indicated by a blue token. The player must survive for an unknown number of days by scavenging for food and materials in buildings throughout the map. If the player doesn't have food, then he will start to lose health over time. If the player doesn't have materials, then player can't repair their home building. If the player's home building is destroyed, the player loses.
+The player has a single survivor, as indicated by a blue token. The player must survive for an unknown number of days by scavenging for food and materials in buildings throughout the map. If the player doesn't have food, then he will start to lose health over time. If the player doesn't have materials, then player can't repair their home building. If the player's home building is destroyed or the player's health reaches 0, the player loses.
 
 ## File and Class Structure
 
@@ -74,7 +76,7 @@ As per the project requirements, this section of the README will indicate (at le
 
 As a starting point for this project, I looked at the Udacity Snake Game and kept the core structure of Game, Controller, Renderer. I deleted eveything I thought I didn't need and then built up from there.
 
-To learn how to use the SDL library, I looked at the SDL tutorials from Lazy Foo. His tutorials are pure quality and far superior to anything else I saw.
+To learn how to use the SDL library, I looked at the SDL tutorials from Lazy Foo. His tutorials are pure quality and far superior to anything else I could find.
 
 I used a font called BlackCapsRegular-wgA2. It's licensed under the CC Attribution license. Per the license, I must provide the name of its designer, G369.
 https://www.fontspace.com/black-caps-font-f11717
