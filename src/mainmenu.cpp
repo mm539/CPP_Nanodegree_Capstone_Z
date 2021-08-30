@@ -1,4 +1,5 @@
 #include "mainmenu.h"
+#include <thread>
 
 
 MainMenu::MainMenu( std::size_t screen_width, std::size_t screen_height ) :
@@ -16,6 +17,7 @@ void MainMenu::Run( Controller const &controller,
   Uint32 frame_start;
   Uint32 frame_end;
   Uint32 frame_duration;
+  Uint32 delay;
 
   while( status.running && status.menuScreen )
   {
@@ -28,9 +30,11 @@ void MainMenu::Run( Controller const &controller,
 
     frame_end = SDL_GetTicks();
     frame_duration = frame_end - frame_start;
+    delay = target_frame_duration - frame_duration;
+
     if( frame_duration < target_frame_duration )
     {
-      SDL_Delay( target_frame_duration - frame_duration );
+      SDL_Delay( delay );
     }
   }
 }

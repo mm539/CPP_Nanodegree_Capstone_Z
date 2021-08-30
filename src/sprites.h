@@ -9,6 +9,8 @@
 #include <vector>
 #include <string>
 
+// For the purpose of this project, a sprite class is a class of objects that receive user input
+
 /********* 1. Forward declaration  *********/
 class GameStatsDisplay;
 
@@ -59,17 +61,16 @@ enum BuildingSprite
 };
 
 
-
 /********* 3. Sprites  *********/
 
-class Sprite
+class Sprite // abstract class
 {
   public:
     // constructor
     Sprite(){}
 
     bool handleEvent( SDL_Event* e );
-    void render(SDL_Renderer* rend);
+    virtual void render(SDL_Renderer* rend) = 0;
     CSMouseState getMouseState();
     void setPosition( int x, int y );
 
@@ -88,7 +89,7 @@ class Button: public Sprite
     // constructor
     Button( ButtonSprite sprite, int width, int height, std::string imgPath );
 
-    void render( SDL_Renderer* rend );
+    void render( SDL_Renderer* rend ) override;
 
     ButtonSprite getSprite();
     ButtonState getButtonState();
@@ -112,7 +113,7 @@ class Building: public Sprite
               std::string _imgPath,
               int food, int materials, int dangerLevel );
 
-    void render( SDL_Renderer* rend );
+    void render( SDL_Renderer* rend ) override;
 
     SDL_Point getBuildingCoord();
     int getID();

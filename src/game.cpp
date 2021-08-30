@@ -3,6 +3,7 @@
 #include <time.h>
 #include <random>
 #include <iostream>
+#include <thread>
 
 Game::Game(int screen_width, int screen_height,
         int grid_width, int grid_height,
@@ -32,6 +33,7 @@ void Game::Run( Controller const &controller,
   Uint32 frame_start;
   Uint32 frame_end;
   Uint32 frame_duration;
+  Uint32 delay;
   // int frame_count = 0; // yet to be implemented feature for FPS calculation
 
   while( status.running && status.gameScreen )
@@ -47,15 +49,15 @@ void Game::Run( Controller const &controller,
 
     // frame_count++;
     frame_duration = frame_end - frame_start;
+    delay = target_frame_duration - frame_duration;
 
-    if( frame_duration < target_frame_duration ) SDL_Delay( target_frame_duration - frame_duration );
+    if( frame_duration < target_frame_duration ) SDL_Delay( delay );
 
     if( !status.gameScreen )
     {
       endGame();
     }
   }
-
 }
 
 void Game::endGame()

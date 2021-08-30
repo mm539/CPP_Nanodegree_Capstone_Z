@@ -138,7 +138,7 @@ struct InitDimen
 {
   InitDimen();
   
-  const std::size_t kFPS{ 60 };
+  const std::size_t kFPS{ 30 };
   const std::size_t kMsPerFrame{ 1000 / kFPS };
   const int kSCREEN_WIDTH{ 960 };
   const int kSCREEN_HEIGHT{ 880};
