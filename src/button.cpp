@@ -1,10 +1,42 @@
-#include "sprites.h"
+#include "button.h"
+
+std::string getImagePath(ButtonType type){
+  std::map<ButtonType, std::string> paths = {
+    {ButtonType::BNULL, ""},
+    {ButtonType::QUIT, "../img/xx-quit-130-60.bmp"},
+    {ButtonType::REST, "../img/01rest-130-60.bmp"},
+    {ButtonType::REPAIR, "../img/02repair-130-60.bmp"},
+    {ButtonType::GO, "../img/03go-130-60.bmp" },
+    {ButtonType::GO_HOME, "../img/04gohome-130-60.bmp"},
+    {ButtonType::SCOUT, "../img/05scout-130-60.bmp"},
+    {ButtonType::CLEAR, "../img/06clear-130-60.bmp"},
+    {ButtonType::SCAVENGE, "../img/07scavenge-130-60.bmp"},
+    {ButtonType::START, "../img/xx-start-130-60.bmp"},
+    {ButtonType::HOME, "../img/buildings-home128.bmp"},
+    {ButtonType::HOUSE, "../img/buildings-house128.bmp"},
+    {ButtonType::HARDWARE_STORE, "../img/buildings-hstore128.bmp"},
+    {ButtonType::CONVENIENCE_STORE, "../img/buildings-cstore128.bmp"}
+  };
+
+  std::string path;
+
+  try
+  {
+    path = paths.at(type);
+  }
+  catch(const std::exception& e)
+  {
+    std::cerr << e.what() << '\n';
+  }
+  
+  return path;
+}
 
 /*
-Sprite
+Button
 */
 
-bool Sprite::handleEvent( SDL_Event* e )
+bool Button::handleEvent( SDL_Event* e )
 {
   int x, y;
   bool inside = true;
@@ -47,7 +79,7 @@ bool Sprite::handleEvent( SDL_Event* e )
   return false;
 }
 
-void Sprite::setPosition( int x, int y )
+void Button::setPosition( int x, int y )
 {
   _position.x = x;
   _position.y = y;
@@ -57,15 +89,15 @@ void Sprite::setPosition( int x, int y )
 BUTTON
 */
 
-Button::Button( ButtonSprite sprite, int width, int height, std::string imgPath )
+Button::Button( ButtonType type, int width, int height )
 {
   _width = width;
   _height = height;
   _position.x = 0;
   _position.y = 0;
 
-  _sprite = sprite;
-  _imgPath = imgPath;
+  _buttonType = type;
+  _imgPath = getImagePath(type);
   _mouseState = STATE_MOUSE_OUT;
 }
 
@@ -87,9 +119,9 @@ void Button::render(SDL_Renderer* rend)
   _LTexture.render( rend , _position, _width, _height );
 }
 
-ButtonSprite Button::getSprite()
+ButtonType Button::getType()
 {
-  return _sprite;
+  return _buttonType;
 }
 
 ButtonState Button::getButtonState()
@@ -106,20 +138,19 @@ void Button::setButtonState( ButtonState buttonState )
 BUILDING
 */
 
-Building::Building( int id, BuildingSprite sprite, 
+Building::Building( int id, ButtonType type, 
                     int width, int height, 
                     int xpos, int ypos,
-                    std::string imgPath,
                     int food, int materials, int dangerLevel )
-: _id( id )
 {
+  _id = id;
   _width = width;
   _height = height;
   _position.x = xpos;
   _position.y = ypos;
 
-  _sprite = sprite;
-  _imgPath = imgPath;
+  _buttonType = type;
+  _imgPath = getImagePath(type);
   _mouseState = STATE_MOUSE_OUT;
   _scouted = false;
   _food = food;

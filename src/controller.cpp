@@ -7,7 +7,7 @@ Controller::Controller()
   
 }
 
-void Controller::handleEvent( bool &running, std::vector<Button> &buttons, ButtonSprite &clickedButtonSprite ) const
+void Controller::handleEvent( bool &running, std::vector<Button> &buttons, ButtonType &clickedButtonType ) const
 {
   SDL_Event e;
   bool mouseDown = false;
@@ -27,7 +27,7 @@ void Controller::handleEvent( bool &running, std::vector<Button> &buttons, Butto
       {
         if( buttons[ j ].handleEvent( &e ) && buttons[ j ].getButtonState() == ButtonState::BUTTON_VISIBLE) //if button is clicked && button is visible, true
         {
-          clickedButtonSprite = buttons[ j ].getSprite();
+          clickedButtonType = buttons[ j ].getType();
         }
       }
     }
@@ -35,7 +35,7 @@ void Controller::handleEvent( bool &running, std::vector<Button> &buttons, Butto
 }
 
 void Controller::handleEvent( bool &running, 
-            std::vector<std::shared_ptr<Building>>& buildings, std::vector<Button>& buttons, ButtonSprite& clickedButtonSprite, std::shared_ptr<Building>& clickedBuilding ) const
+            std::vector<std::shared_ptr<Building>>& buildings, std::vector<Button>& buttons, ButtonType& clickedButtonType, std::shared_ptr<Building>& clickedBuilding ) const
 {
   SDL_Event e;
   bool mouseDown = false;
@@ -65,7 +65,7 @@ void Controller::handleEvent( bool &running,
       {
         if( buttons[ j ].handleEvent( &e ) && buttons[ j ].getButtonState() == ButtonState::BUTTON_VISIBLE) //if button is clicked && button is visible, true
         {
-          clickedButtonSprite = buttons[ j ].getSprite();
+          clickedButtonType = buttons[ j ].getType();
         }
       }
     }

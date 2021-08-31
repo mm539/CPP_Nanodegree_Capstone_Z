@@ -41,7 +41,7 @@ void Game::Run( Controller const &controller,
     frame_start = SDL_GetTicks();
 
     // INPUT, UPDATE, RENDER
-    controller.handleEvent( status.running, _buildings, _buttons, _clickedButtonSprite, _clickedBuilding );
+    controller.handleEvent( status.running, _buildings, _buttons, _clickedButtonType, _clickedBuilding );
     update( status );
     renderer.renderAll( _buildings, _gameStatsDisplay, _buttons, _player ); 
 
@@ -91,7 +91,7 @@ void Game::makeBuildings()
   int rando = rand() % 2;
   _homeID = ( ( x * y ) / 2 + 3 ) + rando; // set location of home base
   int id, xPos, yPos;
-  BuildingSprite sprite;
+  ButtonType type;
   std::string imgPath;
   int food, materials, danger;
   bool build;
@@ -107,30 +107,26 @@ void Game::makeBuildings()
 
       if( id == _homeID )
       {
-        sprite = BuildingSprite::BUILDING_SPRITE_HOME;
-        imgPath = "../img/buildings-home128.bmp";
+        type = ButtonType::HOME;
         food = 0, materials = 0, danger = 0;
       }
       else if( ( rand() % 12 ) <= 7 )
       {
-        sprite = BuildingSprite::BUILDING_SPRITE_HOUSE;
-        imgPath = "../img/buildings-house128.bmp";
+        type = ButtonType::HOUSE;
         food = 10 + rand() % 6;
         materials = 10 + rand() % 6;
         danger = 5 + rand() % 10;
       }
       else if( ( rand() % 12 ) <= 3 )
       {
-        sprite = BuildingSprite::BUILDING_SPRITE_HSTORE;
-        imgPath = "../img/buildings-hstore128.bmp";
+        type = ButtonType::HARDWARE_STORE;
         food = 0;
         materials = 15 + rand() % 12;
         danger = 15 + rand() % 10;
       }
       else if( ( rand() % 12 ) <= 3 )
       {
-        sprite = BuildingSprite::BUILDING_SPRITE_CSTORE;
-        imgPath = "../img/buildings-cstore128.bmp";
+        type = ButtonType::CONVENIENCE_STORE;
         food = 15 + rand() % 12;
         materials = 0;
         danger = 15 + rand() % 10;
@@ -144,9 +140,9 @@ void Game::makeBuildings()
       {
         _buildings.emplace_back( 
           std::shared_ptr<Building> (
-          new Building( id, sprite,
+          new Building( id, type,
           _gridWidth , _gridHeight, xPos, yPos,
-          imgPath, food, materials, danger ) )
+          food, materials, danger ) )
         );
       }
 
@@ -165,13 +161,13 @@ void Game::makeGSD()
 
 void Game::makeButtons()
 {
-  _buttons.push_back( Button( ButtonSprite::BUTTON_SPRITE_REST, 130, 60, "../img/01rest-130-60.bmp" ) );
-  _buttons.push_back( Button( ButtonSprite::BUTTON_SPRITE_REPAIR, 130, 60, "../img/02repair-130-60.bmp" ) );
-  _buttons.push_back( Button( ButtonSprite::BUTTON_SPRITE_GO, 130, 60, "../img/03go-130-60.bmp" ) );
-  _buttons.push_back( Button( ButtonSprite::BUTTON_SPRITE_GO_HOME, 130, 60, "../img/04gohome-130-60.bmp" ) );
-  _buttons.push_back( Button( ButtonSprite::BUTTON_SPRITE_SCOUT, 130, 60, "../img/05scout-130-60.bmp" ) );
-  _buttons.push_back( Button( ButtonSprite::BUTTON_SPRITE_CLEAR, 130, 60, "../img/06clear-130-60.bmp" ) );
-  _buttons.push_back( Button( ButtonSprite::BUTTON_SPRITE_SCAVENGE, 130, 60, "../img/07scavenge-130-60.bmp" ) );
+  _buttons.push_back( Button( ButtonType::REST, 130, 60 ) );
+  _buttons.push_back( Button( ButtonType::REPAIR, 130, 60 ) );
+  _buttons.push_back( Button( ButtonType::GO, 130, 60 ) );
+  _buttons.push_back( Button( ButtonType::GO_HOME, 130, 60 ) );
+  _buttons.push_back( Button( ButtonType::SCOUT, 130, 60 ) );
+  _buttons.push_back( Button( ButtonType::CLEAR, 130, 60 ) );
+  _buttons.push_back( Button( ButtonType::SCAVENGE, 130, 60 ) );
 }
 
 void Game::makePlayer()
@@ -186,7 +182,7 @@ void Game::makePlayer()
 void Game::update( Status &status )
 {
   updateButtons(); // sets which buttons are visible, invisible, clickable according to 1. location of player 2. building clicked on
-  buttonAction(); // performs the action set in _clickedButtonSprite
+  buttonAction(); // performs the action set in _clickedButtonType
   updateGSD();
  
   // if player is at home and has supplies, transfer those materials to the base
@@ -232,22 +228,22 @@ void Game::update( Status &status )
 
 void Game::buttonAction()
 {
-  switch ( _clickedButtonSprite )
+  switch ( _clickedButtonType )
   {
-  case ButtonSprite::BUTTON_SPRITE_REST:
+  case ButtonType::REST:
     _actionResultText = _gameTime.getActionMsg( " Rested for an hour. ");
     _gameTime.addTime( 1 );
     _player.changePlayerHealth( 5 );
     break;
 
-  case ButtonSprite::BUTTON_SPRITE_REPAIR:
+  case ButtonType::REPAIR:
     _actionResultText = _gameTime.getActionMsg( " Repaired defenses for an hour. ");
     _gameTime.addTime( 1 );
     _player.changeHomeHealth( 10 );
     _player.changeHomeMaterials( - 5 );
     break;
 
-  case ButtonSprite::BUTTON_SPRITE_GO:
+  case ButtonType::GO:
     if( computeTravelTime() + _gameTime.getHours() <= 24 ) 
      {
        _actionResultText = _gameTime.getActionMsg( " Traveled to a building. ");
@@ -262,7 +258,7 @@ void Game::buttonAction()
      
     break;
 
-  case ButtonSprite::BUTTON_SPRITE_GO_HOME:
+  case ButtonType::GO_HOME:
     if( computeTravelTime() + _gameTime.getHours() <= 24 )
     {
       _actionResultText = _gameTime.getActionMsg( " Went home. ");
@@ -276,19 +272,19 @@ void Game::buttonAction()
     }
     break;
 // the next three cases use buildingStatus
-  case ButtonSprite::BUTTON_SPRITE_SCOUT:
+  case ButtonType::SCOUT:
     _actionResultText = _gameTime.getActionMsg( " Scouted for an hour. ");
     _gameTime.addTime( 1 );
     _clickedBuilding->changeScouted( true );
     break;
 
-  case ButtonSprite::BUTTON_SPRITE_CLEAR:
+  case ButtonType::CLEAR:
     clearBuilding();
     _actionResultText = _gameTime.getActionMsg( " Cleared some Zs. ");
     _gameTime.addTime( 1 );
     break;
 
-  case ButtonSprite::BUTTON_SPRITE_SCAVENGE:
+  case ButtonType::SCAVENGE:
     scavengeBuilding();
     _actionResultText = _gameTime.getActionMsg( " Scavenged. ");
     _gameTime.addTime( 1 );
@@ -298,7 +294,7 @@ void Game::buttonAction()
   default:
     break;
   }
-  _clickedButtonSprite = ButtonSprite::BUTTON_SPRITE_NULL;
+  _clickedButtonType = ButtonType::BNULL;
 }
 
 
@@ -345,16 +341,16 @@ void Game::updateButtons()
   {
     if( atHomeANDclickBuilding )
     {
-      if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_GO ) b.setButtonState( ButtonState::BUTTON_VISIBLE );
+      if( b.getType() == ButtonType::GO ) b.setButtonState( ButtonState::BUTTON_VISIBLE );
       else b.setButtonState( ButtonState::BUTTON_INVISIBLE );
     }
     else if( atHomeANDclickHome )
     {
-      if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_REST )
+      if( b.getType() == ButtonType::REST )
       {
         b.setButtonState( ButtonState::BUTTON_VISIBLE );
       }
-      else if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_REPAIR )
+      else if( b.getType() == ButtonType::REPAIR )
       {
         if( homeHealth < 100) b.setButtonState( ButtonState::BUTTON_VISIBLE );
         else b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );
@@ -363,24 +359,24 @@ void Game::updateButtons()
     }
     else if( atBuildingANDclickHome )
     {
-      if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_GO_HOME ) 
+      if( b.getType() == ButtonType::GO_HOME ) 
       b.setButtonState( ButtonState::BUTTON_VISIBLE );
       else b.setButtonState( ButtonState::BUTTON_INVISIBLE );
     }
     else if( atBuildingANDclickOtherBuilding )
     {
-      if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_GO ) 
+      if( b.getType() == ButtonType::GO ) 
       b.setButtonState( ButtonState::BUTTON_VISIBLE );
       else b.setButtonState( ButtonState::BUTTON_INVISIBLE );
     }
     else if( atBuildingANDclickSameBuilding )
     {
-      if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_SCOUT && scouted ) b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );
-      else if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_SCAVENGE && foodAmt == 0 && matAmt == 0 ) b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );
-      else if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_CLEAR && dangerLvl == 0 ) b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );      
-      else if( b.getSprite() == ButtonSprite::BUTTON_SPRITE_SCOUT ||
-          b.getSprite() == ButtonSprite::BUTTON_SPRITE_SCAVENGE ||
-          b.getSprite() == ButtonSprite::BUTTON_SPRITE_CLEAR ) 
+      if( b.getType() == ButtonType::SCOUT && scouted ) b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );
+      else if( b.getType() == ButtonType::SCAVENGE && foodAmt == 0 && matAmt == 0 ) b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );
+      else if( b.getType() == ButtonType::CLEAR && dangerLvl == 0 ) b.setButtonState( ButtonState::BUTTON_UNCLICKABLE );      
+      else if( b.getType() == ButtonType::SCOUT ||
+          b.getType() == ButtonType::SCAVENGE ||
+          b.getType() == ButtonType::CLEAR ) 
       b.setButtonState( ButtonState::BUTTON_VISIBLE );
       else b.setButtonState( ButtonState::BUTTON_INVISIBLE );
     }

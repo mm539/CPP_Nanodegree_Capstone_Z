@@ -4,7 +4,7 @@
 #include "SDL.h"
 #include "SDL_ttf.h"
 #include "gfx.h"
-#include "sprites.h"
+#include "button.h"
 #include "player.h"
 #include "status.h"
 #include <vector>

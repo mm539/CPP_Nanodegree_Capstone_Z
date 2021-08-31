@@ -24,7 +24,7 @@ void MainMenu::Run( Controller const &controller,
     frame_start = SDL_GetTicks();
 
     // INPUTE UPDATE RENDER
-    controller.handleEvent( status.running, _buttons, _clickedButtonSprite );
+    controller.handleEvent( status.running, _buttons, _clickedButtonType );
     update( status );
     renderer.renderAll( _buttons, _title );
 
@@ -41,8 +41,8 @@ void MainMenu::Run( Controller const &controller,
 
 void MainMenu::makeButtons()
 {
-  _buttons.push_back( Button( ButtonSprite::BUTTON_SPRITE_START, 130, 60, "../img/xx-start-130-60.bmp" ) );
-  _buttons.push_back( Button( ButtonSprite::BUTTON_SPRITE_QUIT, 130, 60, "../img/xx-quit-130-60.bmp" ) );
+  _buttons.push_back( Button( ButtonType::START, 130, 60 ) );
+  _buttons.push_back( Button( ButtonType::QUIT, 130, 60 ) );
 }
 
 void MainMenu::update( Status &status )
@@ -61,18 +61,18 @@ void MainMenu::updateButtons()
 
 void MainMenu::buttonAction( Status &status)
 {
-  switch( _clickedButtonSprite )
+  switch( _clickedButtonType )
   {
-    case ButtonSprite::BUTTON_SPRITE_START:
+    case ButtonType::START:
       status.menuScreen = false;
       status.gameScreen = true;
       break;
-    case ButtonSprite::BUTTON_SPRITE_QUIT:
+    case ButtonType::QUIT:
       status.menuScreen = false;
       status.running = false;
       break;
     default:
       break;
   }
-  _clickedButtonSprite = ButtonSprite::BUTTON_SPRITE_NULL;
+  _clickedButtonType = ButtonType::BNULL;
 }

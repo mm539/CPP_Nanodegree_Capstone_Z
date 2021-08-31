@@ -4,7 +4,7 @@
 #include "SDL.h"
 #include "status.h"
 #include "player.h"
-#include "sprites.h"
+#include "button.h"
 #include "controller.h"
 #include "renderer.h"
 #include <vector>
@@ -30,7 +30,7 @@ class Credits
   TextDisplay _credits;
 
   std::vector<Button> _buttons;
-  ButtonSprite _clickedButtonSprite;
+  ButtonType _clickedButtonType;
 };
 
 #endif

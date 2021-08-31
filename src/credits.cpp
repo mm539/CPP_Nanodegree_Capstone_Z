@@ -20,7 +20,7 @@ void Credits::Run( Controller &controller,
     frame_start = SDL_GetTicks();
 
     // INPUT UPDATE RENDER
-    controller.handleEvent( status.running, _buttons, _clickedButtonSprite );
+    controller.handleEvent( status.running, _buttons, _clickedButtonType );
     update( status );
     renderer.renderAll( _buttons, _credits );
 
@@ -35,7 +35,7 @@ void Credits::Run( Controller &controller,
 
 void Credits::makeButtons()
 {
- _buttons.push_back( Button( ButtonSprite::BUTTON_SPRITE_QUIT, 130, 60, "../img/xx-quit-130-60.bmp" ) );
+ _buttons.push_back( Button( ButtonType::QUIT, 130, 60 ) );
 }
 
 void Credits::update( Status &status )
@@ -54,14 +54,14 @@ void Credits::updateButtons()
 
 void Credits::buttonAction( Status &status )
 {
-  switch( _clickedButtonSprite )
+  switch( _clickedButtonType )
   {
-    case ButtonSprite::BUTTON_SPRITE_QUIT:
+    case ButtonType::QUIT:
       status.running = false;
       break;
     default:
       break;
   }
-  _clickedButtonSprite = ButtonSprite::BUTTON_SPRITE_NULL;
+  _clickedButtonType = ButtonType::BNULL;
 }
 

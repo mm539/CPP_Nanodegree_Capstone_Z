@@ -1,5 +1,5 @@
-#ifndef SPRITES_H
-#define SPRITES_H
+#ifndef BUTTON_H
+#define BUTTON_H
 
 #include "SDL.h"
 #include "gfx.h"
@@ -9,13 +9,19 @@
 #include <vector>
 #include <string>
 
-// For the purpose of this project, a sprite class is a class of objects that receive user input
+/* 
 
-/********* 1. Forward declaration  *********/
+  1. foward declarations
+  2. helper functions
+  3. enums
+  4. classes
+    note: class Building inherits from class Button
+*/
+
+/********* 1. forward declarations  *********/
 class GameStatsDisplay;
 
 /********* 2. ENUMS  *********/
-
 // used in event handling
 enum CSMouseState 
 {
@@ -26,20 +32,23 @@ enum CSMouseState
   STATE_TOTAL = 4
 };
 
-// gameplay button sprites
-enum ButtonSprite
-{
-  BUTTON_SPRITE_NULL = 0,
-  BUTTON_SPRITE_REST = 1,
-  BUTTON_SPRITE_REPAIR = 2,
-  BUTTON_SPRITE_GO = 3,
-  BUTTON_SPRITE_GO_HOME = 4,
-  BUTTON_SPRITE_SCOUT = 5,
-  BUTTON_SPRITE_CLEAR = 6,
-  BUTTON_SPRITE_SCAVENGE = 7,
-  BUTTON_SPRITE_START = 8,
-  BUTTON_SPRITE_QUIT = 9,
-  BUTTON_TOTAL = 10
+// gameplay button types
+enum ButtonType{
+  BNULL = 0,
+  REST = 1,
+  REPAIR = 2,
+  GO = 3,
+  GO_HOME = 4,
+  SCOUT = 5,
+  CLEAR = 6,
+  SCAVENGE = 7,
+  START = 8,
+  QUIT = 9,
+  HOME = 10,
+  HARDWARE_STORE = 11, 
+  CONVENIENCE_STORE = 12, 
+  HOUSE = 13,
+  COUNT = 14
 };
 
 // used to determine how to display a button
@@ -50,70 +59,51 @@ enum ButtonState
   BUTTON_UNCLICKABLE = 2 // visible, unclickable
 };
 
-// used to determine which image to render for a building
-enum BuildingSprite
-{
-  BUILDING_SPRITE_HOME = 0,
-  BUILDING_SPRITE_HSTORE = 1, // hardware store
-  BUILDING_SPRITE_CSTORE = 2, // convenience store
-  BUILDING_SPRITE_HOUSE = 3,
-  BUILDING_SPRITE_TOTAL = 4
-};
+/********* 3. helper functions  *********/
+
+std::string getImagePath(ButtonType type);
 
 
-/********* 3. Sprites  *********/
+/********* 4. classes  *********/
 
-class Sprite // abstract class
+class Button
 {
   public:
-    // constructor
-    Sprite(){}
+    Button(){}
+    Button( ButtonType type, int width, int height); // constructor
 
     bool handleEvent( SDL_Event* e );
-    virtual void render(SDL_Renderer* rend) = 0;
-    CSMouseState getMouseState();
+    void render(SDL_Renderer* rend);
+
+    // getters and setters
+    ButtonType getType();
+    ButtonState getButtonState();
     void setPosition( int x, int y );
+    void setButtonState( ButtonState buttonState );
+
 
   protected:
+    ButtonType _buttonType;
     SDL_Point _position;
     CSMouseState _mouseState;
+    ButtonState _buttonState { BUTTON_INVISIBLE };
     bool _mousedDown; // used to detect a full click
     int _width;
     int _height;
     std::string _imgPath;
-};
-
-class Button: public Sprite
-{
-  public:
-    // constructor
-    Button( ButtonSprite sprite, int width, int height, std::string imgPath );
-
-    void render( SDL_Renderer* rend ) override;
-
-    ButtonSprite getSprite();
-    ButtonState getButtonState();
-
-    void setButtonState( ButtonState buttonState );
-
-  private:
-    ButtonSprite _sprite;
-    ButtonState _buttonState { BUTTON_INVISIBLE };
     LTexture _LTexture;
 };
 
-class Building: public Sprite
+class Building: public Button
 {
   public:
     // Constructors
-    Building(){}
-    Building( int id, BuildingSprite sprite,
+    Building( int id, ButtonType type,
               int width, int height, 
               int xpos, int ypos,
-              std::string _imgPath,
               int food, int materials, int dangerLevel );
 
-    void render( SDL_Renderer* rend ) override;
+    void render( SDL_Renderer* rend );
 
     SDL_Point getBuildingCoord();
     int getID();
@@ -138,8 +128,6 @@ class Building: public Sprite
   
   private:
     int _id; // building ID
-    BuildingSprite _sprite;
-    LTexture _LTexture;
 
     int _food;
     int _materials;

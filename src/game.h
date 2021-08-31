@@ -4,7 +4,7 @@
 #include "SDL.h"
 #include "status.h"
 #include "player.h"
-#include "sprites.h"
+#include "button.h"
 #include "controller.h"
 #include "renderer.h"
 #include <vector>
@@ -78,7 +78,7 @@ class Game
   std::vector<std::shared_ptr<Building>> _buildings;
   std::vector<Button> _buttons;
 
-  ButtonSprite _clickedButtonSprite; // the most recently clicked button
+  ButtonType _clickedButtonType; // the most recently clicked button
   std::shared_ptr<Building> _clickedBuilding;
   GameTime _gameTime; // game time. hours, minutes
   int _homeID; // the id of the home building
