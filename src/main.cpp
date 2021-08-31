@@ -20,13 +20,13 @@ int main()
 
   while( status.running )
   {
-    if( status.menuScreen )
+    if( status.screen == Screen::MENU )
     {
       //TextDisplay title;
       MainMenu mainMenu( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT );
       mainMenu.Run( controller, renderer, id.kMsPerFrame, status );
     }
-    else if( status.gameScreen )
+    else if( status.screen == Screen::PLAYING )
     {
       Game game( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT, 
              id.kGRID_WIDTH, id.kGRID_HEIGHT, 
@@ -35,7 +35,7 @@ int main()
       game.Run( controller, renderer, id.kMsPerFrame, status );
       creditsMSG = game.getCreditsMSG();
     }
-    else if( status.creditScreen )
+    else if( status.screen == Screen::CREDIT )
     {
       Credits credits( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT, creditsMSG );
       credits.Run( controller, renderer, id.kMsPerFrame, status );

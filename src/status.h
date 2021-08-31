@@ -1,12 +1,17 @@
 #ifndef STATUS_H
 #define STATUS_H
 
+enum Screen{
+  NONE = 0,
+  MENU = 1,
+  PLAYING = 2,
+  CREDIT = 3
+};
+
 struct Status
 {
   bool running { true };
-  bool menuScreen { true };
-  bool gameScreen { false };
-  bool creditScreen { false };
+  Screen screen { Screen::MENU };
 };
 
 #endif

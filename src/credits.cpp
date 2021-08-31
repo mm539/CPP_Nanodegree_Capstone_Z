@@ -15,7 +15,7 @@ void Credits::Run( Controller &controller,
   Uint32 frame_end;
   Uint32 frame_duration;
 
-  while( status.running && status.creditScreen )
+  while( status.running && status.screen == Screen::CREDIT )
   {
     frame_start = SDL_GetTicks();
 

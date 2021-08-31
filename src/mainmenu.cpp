@@ -19,8 +19,9 @@ void MainMenu::Run( Controller const &controller,
   Uint32 frame_duration;
   Uint32 delay;
 
-  while( status.running && status.menuScreen )
+  while( status.running && status.screen == Screen::MENU )
   {
+    
     frame_start = SDL_GetTicks();
 
     // INPUTE UPDATE RENDER
@@ -64,11 +65,10 @@ void MainMenu::buttonAction( Status &status)
   switch( _clickedButtonType )
   {
     case ButtonType::START:
-      status.menuScreen = false;
-      status.gameScreen = true;
+      status.screen = Screen::PLAYING;
       break;
     case ButtonType::QUIT:
-      status.menuScreen = false;
+      status.screen = Screen::NONE;
       status.running = false;
       break;
     default:
