@@ -11,11 +11,15 @@ void Screen::Run( Controller const &controller,
   Uint32 frame_start;
   Uint32 frame_end;
   Uint32 frame_duration;
-  Uint32 delay;
+  int delay;
 
-  while( status.running && status.screen == desiredScreen )
+  while( true )
   {
-    
+    status._mutex.lock();
+    if ( status.running == false || status.screen != desiredScreen ){
+      status._mutex.unlock();
+      break;
+    }
     frame_start = SDL_GetTicks();
 
     // INPUTE UPDATE RENDER
@@ -23,6 +27,8 @@ void Screen::Run( Controller const &controller,
     update( status );
     childRender( renderer );// renderer.renderAll( _buttons, _title );
 
+    status._mutex.unlock();
+    
     frame_end = SDL_GetTicks();
     frame_duration = frame_end - frame_start;
     delay = target_frame_duration - frame_duration;

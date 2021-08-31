@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <future>
 #include "gfx.h"
 #include "controller.h"
 #include "game.h"
@@ -21,12 +22,17 @@ int main()
   {
     if( status.screen == EScreen::MENU )
     {
-      //TextDisplay title;
       MainMenu mainMenu( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT );
       mainMenu.Run( controller, renderer, id.kMsPerFrame, status, EScreen::MENU );
     }
     else if( status.screen == EScreen::INITIAL_LOAD )
     {
+      std::future<void> ftr = async(std::launch::async, [&status](){
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+        status._mutex.lock();
+        status.screen = EScreen::PLAYING;
+        status._mutex.unlock();
+      });
       LoadingScreen loadingScreen( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT );
       loadingScreen.Run( controller, renderer, id.kMsPerFrame, status, EScreen::INITIAL_LOAD );
     }

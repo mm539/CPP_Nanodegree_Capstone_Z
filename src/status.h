@@ -1,6 +1,8 @@
 #ifndef STATUS_H
 #define STATUS_H
 
+#include <mutex>
+
 enum EScreen{
   NONE = 0,
   MENU = 1,
@@ -11,6 +13,7 @@ enum EScreen{
 
 struct Status
 {
+  std::mutex _mutex;
   bool running { true };
   EScreen screen { EScreen::MENU };
 };
