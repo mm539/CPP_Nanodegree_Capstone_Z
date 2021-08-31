@@ -36,7 +36,7 @@ void Game::Run( Controller const &controller,
   Uint32 delay;
   // int frame_count = 0; // yet to be implemented feature for FPS calculation
 
-  while( status.running && status.screen == Screen::PLAYING )
+  while( status.running && status.screen == EScreen::PLAYING )
   {
     frame_start = SDL_GetTicks();
 
@@ -218,7 +218,7 @@ void Game::update( Status &status )
   // check if player has finished the game
   if( _player.getPlayerHealth() <= 0 || _player.getHomeHealth() <= 0 || _gameTime.winTimeMet() )
   {
-    status.screen = Screen::NONE;
+    status.screen = EScreen::NONE;
   }
 }
 

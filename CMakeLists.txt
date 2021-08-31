@@ -15,6 +15,6 @@ find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS} src)
 
-add_executable(z src/main.cpp src/renderer.cpp src/controller.cpp src/gfx.cpp  src/button.cpp src/player.cpp src/game.cpp src/mainmenu.cpp src/credits.cpp src/status.h)
+add_executable(z src/main.cpp src/renderer.cpp src/controller.cpp src/gfx.cpp  src/button.cpp src/player.cpp src/game.cpp src/status.h src/screen.cpp)
 string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
 target_link_libraries(z ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY})

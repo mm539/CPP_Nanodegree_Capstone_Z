@@ -4,14 +4,13 @@
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
-#include "mainmenu.h"
-#include "credits.h"
 #include "status.h"
+#include "screen.h"
 
 int main()
 {
   InitDimen id;
-  Status status; // which screen ( menu, game, credits ) is active
+  Status status;
 
   Renderer renderer( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT, 
                      id.kGRID_WIDTH, id.kGRID_HEIGHT );
@@ -20,13 +19,18 @@ int main()
 
   while( status.running )
   {
-    if( status.screen == Screen::MENU )
+    if( status.screen == EScreen::MENU )
     {
       //TextDisplay title;
       MainMenu mainMenu( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT );
-      mainMenu.Run( controller, renderer, id.kMsPerFrame, status );
+      mainMenu.Run( controller, renderer, id.kMsPerFrame, status, EScreen::MENU );
     }
-    else if( status.screen == Screen::PLAYING )
+    else if( status.screen == EScreen::INITIAL_LOAD )
+    {
+      LoadingScreen loadingScreen( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT );
+      loadingScreen.Run( controller, renderer, id.kMsPerFrame, status, EScreen::INITIAL_LOAD );
+    }
+    else if( status.screen == EScreen::PLAYING )
     {
       Game game( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT, 
              id.kGRID_WIDTH, id.kGRID_HEIGHT, 
@@ -35,10 +39,10 @@ int main()
       game.Run( controller, renderer, id.kMsPerFrame, status );
       creditsMSG = game.getCreditsMSG();
     }
-    else if( status.screen == Screen::CREDIT )
+    else if( status.screen == EScreen::CREDIT )
     {
-      Credits credits( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT, creditsMSG );
-      credits.Run( controller, renderer, id.kMsPerFrame, status );
+      CreditScreen creditScreen( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT, creditsMSG );
+      creditScreen.Run( controller, renderer, id.kMsPerFrame, status, EScreen::CREDIT );
     }
   }
     std::cout << "Game has terminated successfully!\n";
