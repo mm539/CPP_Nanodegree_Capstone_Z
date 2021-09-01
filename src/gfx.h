@@ -21,11 +21,13 @@ class LTexture
   void setBlendModeForDraw( SDL_Renderer *rend, SDL_BlendMode blending ); 
   void setAlpha( Uint8 alpha );
   void render( SDL_Renderer* rend, SDL_Point pos, int width, int height );
+  void renderRect( SDL_Renderer* rend, SDL_Point pos, int width, int height, SDL_Color color );
   void renderRect( SDL_Renderer* rend, SDL_Point pos, SDL_Color color );
   void renderRectOutline( SDL_Renderer* rend, SDL_Point pos, int width, int height );
   void setTextureWH( int width, int height );
   int getWidth();
   int getHeight();
+  bool needsLoading();
 
  private:
   SDL_Texture* _texture;

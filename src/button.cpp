@@ -103,7 +103,7 @@ Button::Button( ButtonType type, int width, int height )
 
 void Button::render(SDL_Renderer* rend)
 {
-  _LTexture.loadTextureFromBMP( rend, _imgPath );
+  if (_LTexture.needsLoading() ) _LTexture.loadTextureFromBMP( rend, _imgPath );
   if( _buttonState == ButtonState::BUTTON_UNCLICKABLE )
   {
     _LTexture.setColor( 0x7f, 0x7f, 0x7f );
@@ -111,6 +111,10 @@ void Button::render(SDL_Renderer* rend)
   else if( _mouseState == CSMouseState::STATE_MOUSE_OVER )
   {
     _LTexture.setColor( 0x46, 0xcf, 0x1b ); 
+  }
+  else if( _mouseState == CSMouseState::STATE_MOUSE_OUT )
+  {
+    _LTexture.setColor( 0xFF, 0xFF, 0xFF ); 
   }
   else if( _mouseState == CSMouseState::STATE_MOUSE_DOWN )
   {
@@ -169,25 +173,24 @@ SDL_Point Building::getBuildingCoord()
 }
 void Building::render(SDL_Renderer* rend)
 {
-  
-  _LTexture.loadTextureFromBMP( rend, _imgPath );
+  if (_LTexture.needsLoading() ) _LTexture.loadTextureFromBMP( rend, _imgPath );
   if( _selected == true )
   {
     _LTexture.render( rend , _position, _width, _height );
-    _LTexture.setTextureWH( _width, _height );
     _LTexture.setBlendModeForDraw( rend, SDL_BLENDMODE_BLEND );
     _LTexture.setAlpha( 0 );
-    _LTexture.renderRect( rend, _position, { 128, 0, 128, 112 } );
+    _LTexture.renderRect( rend, _position, _width, _height, { 128, 0, 128, 112 } );
+    return;
   }
   else if( _mouseState == CSMouseState::STATE_MOUSE_OVER)
   {
     _LTexture.setColor( 0xdd, 0xb1, 0xd9 ); 
-    _LTexture.render( rend , _position, _width, _height );
   }
-  else
+  else if( _mouseState == CSMouseState::STATE_MOUSE_OUT)
   {
-    _LTexture.render( rend , _position, _width, _height );
+    _LTexture.setColor( 0xFF, 0xFF, 0xFF ); 
   }
+  _LTexture.render( rend , _position, _width, _height );
   
 }
 

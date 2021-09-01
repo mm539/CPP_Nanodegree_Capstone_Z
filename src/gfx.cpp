@@ -99,6 +99,14 @@ void LTexture::render( SDL_Renderer* rend, SDL_Point pos, int width, int height 
   SDL_RenderCopy( rend, _texture, &src, &dest );
 }
 
+// this function was overloaded because there was a bug that I couldn't figure out with clicking on the building; passing width and height is a workaround.
+void LTexture::renderRect( SDL_Renderer* rend, SDL_Point pos, int width, int height, SDL_Color color )
+{
+  SDL_Rect fillRect = { pos.x, pos.y, width, height };
+  SDL_SetRenderDrawColor( rend, color.r, color.g, color.b, color.a );
+  SDL_RenderFillRect( rend, &fillRect );
+}
+
 void LTexture::renderRect( SDL_Renderer* rend, SDL_Point pos, SDL_Color color )
 {
   SDL_Rect fillRect = { pos.x, pos.y, _width, _height };
@@ -127,6 +135,10 @@ void LTexture::setTextureWH( int width, int height )
 {
   _width = width;
   _height = height;
+}
+
+bool LTexture::needsLoading(){
+  return _texture == nullptr;
 }
 
 /********* 2. GameStatsDisplay  *********/
