@@ -8,6 +8,7 @@ void Screen::Run( Controller const &controller,
                     Status &status,
                     EScreen desiredScreen )
 {
+  childRun(status);
   Uint32 frame_start;
   Uint32 frame_end;
   Uint32 frame_duration;
@@ -53,7 +54,6 @@ void Screen::update( Status &status )
 
 MainMenu::MainMenu( std::size_t screen_width, std::size_t screen_height )
 {
-  _title = TextDisplay( "Z", { 300, 200 } );
   _screenWidth = screen_width;
   _screenHeight= screen_height;
   makeButtons();
@@ -61,14 +61,13 @@ MainMenu::MainMenu( std::size_t screen_width, std::size_t screen_height )
 
 LoadingScreen::LoadingScreen( std::size_t screen_width, std::size_t screen_height )
 {
-  _msg = TextDisplay( "loading", { 300, 200 } );
   _screenWidth = screen_width;
   _screenHeight= screen_height;
   makeButtons();
 }
 
-CreditScreen::CreditScreen( std::size_t screen_width, std::size_t screen_height, TextDisplay msg )
-{
+CreditScreen::CreditScreen( std::size_t screen_width, std::size_t screen_height)
+{  
   _screenWidth = screen_width;
   _screenHeight= screen_height;
   makeButtons();
@@ -95,15 +94,15 @@ void CreditScreen::makeButtons()
 }
 
 void MainMenu::childRender( Renderer &renderer ){
-  renderer.renderAll( _buttons, _title );
+  renderer.renderAll( _buttons, _msg, _backgroundImg );
 }
 
 void LoadingScreen::childRender( Renderer &renderer ){
-  renderer.renderAll( _buttons, _msg );
+  renderer.renderAll( _buttons, _msg, _backgroundImg );
 }
 
 void CreditScreen::childRender( Renderer &renderer ){
-  renderer.renderAll( _buttons, _msg );
+  renderer.renderAll( _buttons, _msg, _backgroundImg );
 }
 
 void MainMenu::updateButtons()
@@ -149,4 +148,59 @@ void CreditScreen::updateButtons()
 void CreditScreen::buttonAction( Status &status)
 {
   //
+}
+
+/*
+
+*/
+
+void MainMenu::childRun( Status &status)
+{
+  _msg = TextDisplay( "Z", { 300, 200 } );
+  _msg.setTextureWH( 256, 256);
+  _msg.setTextHeight( 80 );
+
+  _backgroundImg.setImgPath("../img/main-menu.bmp");
+  _backgroundImg.setTextureWH(1024, 1024);
+}
+
+void LoadingScreen::childRun( Status &status)
+{
+  _msg = TextDisplay( "loading", { 300, 200 } );
+
+  _backgroundImg.setImgPath("../img/z128red.bmp");
+  _backgroundImg.setTextureWH(512, 512);
+  _backgroundImg.setPosition( 256, 256);
+}
+
+void CreditScreen::childRun( Status &status)
+{
+  std::string msgText;
+  std::string imgPath;
+
+  if (status.endGameState == EEndGameState::VICTORY)
+  {
+    msgText = "A passing helicopter spots you and picks you up. You survived!";
+    imgPath = "../img/heli.bmp";
+  }
+  else if (status.endGameState == EEndGameState::PLAYER_DEATH)
+  {
+    msgText = "The zombies tore you apart!";
+    imgPath = "../img/death-192.bmp";
+  }
+  else if (status.endGameState == EEndGameState::BASE_DEATH)
+  {
+    msgText = "The zombies overran your base!";
+    imgPath = "../img/death-192.bmp";
+  }
+
+  _msg = TextDisplay( msgText , {256, 256 });
+  _msg.setTextureWH( 256, 256);
+  _msg.setTextHeight( 80 );
+  _msg.setPosition({256, 256});
+
+  _backgroundImg.setImgPath( imgPath );
+  _backgroundImg.setTextureWH(256, 256);
+  _backgroundImg.setPosition( 256, 362);
+
 }

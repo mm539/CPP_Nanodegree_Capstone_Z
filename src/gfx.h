@@ -25,12 +25,20 @@ class LTexture
   void renderRect( SDL_Renderer* rend, SDL_Point pos, SDL_Color color );
   void renderRectOutline( SDL_Renderer* rend, SDL_Point pos, int width, int height );
   void setTextureWH( int width, int height );
+  void setImgPath(std::string imgPath);
+  void setPosition(int x, int y);
+
   int getWidth();
   int getHeight();
+  SDL_Point getPosition();
   bool needsLoading();
+  bool hasImagePath();
+  std::string getImagePath();
 
  private:
   SDL_Texture* _texture;
+  std::string _imgPath;
+  SDL_Point _position {0, 0};
   int _width;
   int _height;
 
@@ -44,12 +52,18 @@ class TextDisplay
   TextDisplay(); // constructor
   TextDisplay( std::string text, SDL_Point position);
   ~TextDisplay(){} // destructor
+  std::string getText();
+
   void setText( std::string text );
   void setTextureWH( int width, int height );
+  void setTextHeight( int height);
+  void setPosition( SDL_Point position);
+
   void render( SDL_Renderer* rend );
   void render( SDL_Renderer* rend, SDL_Point position);
 
  private:
+  int determineWidth( std::string text );
   TTF_Font* _font = nullptr;
   LTexture _LTexture;
   SDL_Point _position;
@@ -81,8 +95,6 @@ struct GameStatsTexts
   // bottom panel
   std::string _actionResultText;
 };
-
-int determineWidth( std::string& text );
 
 class GameStatsDisplay
 {

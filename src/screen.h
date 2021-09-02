@@ -19,6 +19,7 @@ class Screen
  public:
   Screen(){}
   virtual void childRender( Renderer &renderer ) = 0;
+  virtual void childRun( Status &status ) = 0;
   void Run( Controller const &controller,
             Renderer &renderer,
             std::size_t target_frame_duration,
@@ -35,6 +36,9 @@ class Screen
 
   std::vector<Button> _buttons;
   ButtonType _clickedButtonType;
+
+  LTexture _backgroundImg;
+  TextDisplay _msg;
 };
 
 /*
@@ -46,11 +50,10 @@ class MainMenu: public Screen
   public:
     MainMenu( std::size_t screen_width, std::size_t screen_height );
     void childRender( Renderer &renderer );
+    void childRun( Status &status );
     void makeButtons() override;
     void updateButtons() override;
     void buttonAction( Status &status) override;
-  private:
-    TextDisplay _title;
 };
 
 class LoadingScreen: public Screen
@@ -58,23 +61,21 @@ class LoadingScreen: public Screen
   public:
     LoadingScreen( std::size_t screen_width, std::size_t screen_height );
     void childRender( Renderer &renderer );
+    void childRun( Status &status );
     void makeButtons() override;
     void updateButtons() override;
     void buttonAction( Status &status) override;
-  private:
-    TextDisplay _msg;
 };
 
 class CreditScreen: public Screen
 {
   public:
-    CreditScreen( std::size_t screen_width, std::size_t screen_height, TextDisplay msg );
+    CreditScreen( std::size_t screen_width, std::size_t screen_height);
     void childRender( Renderer &renderer );
+    void childRun( Status &status );
     void makeButtons() override;
     void updateButtons() override;
     void buttonAction( Status &status) override;
-  private:
-    TextDisplay _msg;
 };
 
 #endif

@@ -81,11 +81,17 @@ void Renderer::renderAll( std::vector<std::shared_ptr<Building>>& buildings, Gam
   SDL_RenderPresent( _renderer );
 }
 
-void Renderer::renderAll( std::vector<Button>& buttons, TextDisplay &textDisplay )
+void Renderer::renderAll( std::vector<Button>& buttons, TextDisplay &textDisplay, LTexture &img )
 {
   // clear the screen
   SDL_SetRenderDrawColor( _renderer, 0x00, 0x00, 0x00, 0x00 );
   SDL_RenderClear( _renderer );
+
+  // render background image
+  if ( img.hasImagePath() ){
+    if (img.needsLoading() ) img.loadTextureFromBMP( _renderer, img.getImagePath() );
+    img.render( _renderer, img.getPosition() , img.getWidth(), img.getHeight() );
+  }
 
    // render buttons
   int buttonCounter = 0;

@@ -31,8 +31,8 @@ void LTexture::loadTextureFromBMP( SDL_Renderer* rend, std::string path )
     if( newTexture == nullptr ) std::cout << "Unable to create texture. SDL Error:\n" << SDL_GetError() << std::endl;
     else
     {
-      _width = loadedSurface->w;
-      _height = loadedSurface->h;
+      _width =  _width == 0 ? loadedSurface->w : _width;
+      _height = _height == 0 ? loadedSurface->h : _height;
     }
     SDL_FreeSurface( loadedSurface );
   }
@@ -53,8 +53,8 @@ void LTexture::loadFromRenderedText( SDL_Renderer* rend, std::string text, SDL_C
     if( _texture == nullptr ) std::cerr << "Unable to create texture from rendered text! SDL Error: \n" << SDL_GetError();
     else
     {
-      _width = textSurface->w;
-      _height = textSurface->h;
+      _width =  _width == 0 ? textSurface->w : _width;
+      _height = _height == 0 ? textSurface->h : _height;
     }
     SDL_FreeSurface( textSurface );
   }
@@ -141,6 +141,26 @@ bool LTexture::needsLoading(){
   return _texture == nullptr;
 }
 
+void LTexture::setImgPath(std::string imgPath){
+  _imgPath = imgPath;
+}
+
+bool LTexture::hasImagePath(){
+  return _imgPath != "";
+}
+
+std::string LTexture::getImagePath(){
+  return _imgPath;
+}
+
+void LTexture::setPosition(int x, int y){
+  _position = {x, y};
+}
+
+SDL_Point LTexture::getPosition(){
+  return _position;
+}
+
 /********* 2. GameStatsDisplay  *********/
 
 GameStatsDisplay::GameStatsDisplay()
@@ -148,12 +168,6 @@ GameStatsDisplay::GameStatsDisplay()
   _font = TTF_OpenFont( "../fonts/black-caps-font/BlackCapsRegular-wgA2.ttf", 16 );
   if( _font == nullptr  ) std::cout<< "Failed to load _font. SDL_ttf Error:\n" << TTF_GetError() << std::endl;
  }
-
-int determineWidth( std::string &text )
-{
-  int space = 12; //space per character
-  return space * strlen( text.c_str() );
-}
 
 void GameStatsDisplay::render( SDL_Renderer* rend )
 {
@@ -257,7 +271,8 @@ InitDimen::InitDimen()
 
 TextDisplay::TextDisplay( )
 {
-  _font = TTF_OpenFont( "../fonts/black-caps-font/BlackCapsRegular-wgA2.ttf", 16 );
+  // _font = TTF_OpenFont( "../fonts/black-caps-font/BlackCapsRegular-wgA2.ttf", 16 );
+  _font = TTF_OpenFont( "../fonts/PhenomenologistRegular-BE13.ttf", 16 );
   if( _font == nullptr  ) std::cout<< "Failed to load _font. SDL_ttf Error:\n" << TTF_GetError() << std::endl;
  }
 
@@ -270,9 +285,19 @@ TextDisplay::TextDisplay( std::string text, SDL_Point position )
   _position = position;
  }
 
+void TextDisplay::setPosition( SDL_Point position )
+{
+  _position = position;
+}
+
 void TextDisplay::setText( std::string text )
 {
   _text = text;
+}
+
+std::string TextDisplay::getText()
+{
+  return _text;
 }
 
 void TextDisplay::setTextureWH( int width, int height )
@@ -290,4 +315,14 @@ void TextDisplay::render( SDL_Renderer* rend, SDL_Point position )
 {
   _LTexture.loadFromRenderedText( rend, _text, _textColor, _font );
   _LTexture.render( rend, position, determineWidth( _text ), _textHeight );
+}
+
+void TextDisplay::setTextHeight( int height){
+  _textHeight = height;
+}
+
+int TextDisplay::determineWidth( std::string text )
+{
+  int modifier = 4;
+  return _textHeight * strlen( text.c_str() ) / modifier;
 }

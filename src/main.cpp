@@ -5,8 +5,8 @@
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
-#include "status.h"
 #include "screen.h"
+#include "status.h"
 
 int main()
 {
@@ -16,7 +16,6 @@ int main()
   Renderer renderer( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT, 
                      id.kGRID_WIDTH, id.kGRID_HEIGHT );
   Controller controller;
-  TextDisplay creditsMSG( " testing", { 100, 100 } );
 
   while( status.running )
   {
@@ -43,11 +42,11 @@ int main()
              id.leftPanelPD, id.topPanelPD,
              id.bottomPanelPD, id.mapPanelPD );
       game.Run( controller, renderer, id.kMsPerFrame, status );
-      creditsMSG = game.getCreditsMSG();
+      status.endGameState = game.getEndGameState();
     }
     else if( status.screen == EScreen::CREDIT )
     {
-      CreditScreen creditScreen( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT, creditsMSG );
+      CreditScreen creditScreen( id.kSCREEN_WIDTH, id.kSCREEN_HEIGHT );
       creditScreen.Run( controller, renderer, id.kMsPerFrame, status, EScreen::CREDIT );
     }
   }

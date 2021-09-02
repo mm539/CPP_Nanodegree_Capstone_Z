@@ -5,6 +5,8 @@
 #include <iostream>
 #include <thread>
 
+enum EEndGameState;
+
 Game::Game(int screen_width, int screen_height,
         int grid_width, int grid_height,
         PanelPD left_panel,
@@ -16,7 +18,6 @@ Game::Game(int screen_width, int screen_height,
    _leftPanel( left_panel ), _topPanel( top_panel ),
    _bottomPanel( bottom_panel ), _mapPanel( map_panel )
 {
-  _creditsMSG = TextDisplay( "filler", { 100, 100 } );
   makeBuildings();
   makeGSD(); // GameStatsDisplay
   makeButtons();
@@ -61,20 +62,15 @@ void Game::endGame()
 {
   if ( _player.getPlayerHealth() > 0 && _player.getHomeHealth() > 0 && _gameTime.winTimeMet() )
   {
-    _creditsMSG.setText("You hear the sound of gunfire quickly approaching your location. As quickly as you can, you use your shirt and a long branch on the ground nearby to make a white flag to wave in the air. In the distance you hear faint shouts of what sounds like \"We've got another survivor! We've got another survivor!\" Soon, the soldiers make it to your location and beckon you onto a truck with what appears to be more survivors.\n  Congratulations! You survived!\n");
+    setEndGameState(EEndGameState::VICTORY);
   }
   else if ( _player.getPlayerHealth() <= 0 )
   {
-    _creditsMSG.setText("You've died! Better luck next time!\n");
-    std::cout << "settext\n";
+    setEndGameState(EEndGameState::PLAYER_DEATH);
   }
   else if ( _player.getHomeHealth() <= 0 )
   {
-    _creditsMSG.setText("Your base has been overun! Better luck next time!\n");
-  }
-  else
-  {
-    _creditsMSG.setText("You've quit the game.\n");
+    setEndGameState(EEndGameState::BASE_DEATH);
   }
 }
 
@@ -218,7 +214,7 @@ void Game::update( Status &status )
   // check if player has finished the game
   if( _player.getPlayerHealth() <= 0 || _player.getHomeHealth() <= 0 || _gameTime.winTimeMet() )
   {
-    status.screen = EScreen::NONE;
+    status.screen = EScreen::CREDIT;
   }
 }
 
@@ -521,9 +517,14 @@ void Game::scavengeBuilding()
   }
 }
 
-TextDisplay Game::getCreditsMSG()
+EEndGameState Game::getEndGameState()
 {
-  return _creditsMSG;
+  return _endGameState;
+}
+
+void Game::setEndGameState(EEndGameState endGameState)
+{
+  _endGameState = endGameState;
 }
 
 GameTime::GameTime()

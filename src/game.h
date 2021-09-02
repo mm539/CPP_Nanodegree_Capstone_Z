@@ -52,7 +52,8 @@ class Game
             Renderer &renderer,
             std::size_t target_frame_duration,
             Status &status );
-  TextDisplay getCreditsMSG();
+  EEndGameState getEndGameState();
+  void setEndGameState(EEndGameState endGameState);
 
  private:
   // constructor functions
@@ -96,7 +97,7 @@ class Game
   PanelPD _topPanel;
   PanelPD _mapPanel;
 
-  TextDisplay _creditsMSG;
+  EEndGameState _endGameState;
 };
 
 
