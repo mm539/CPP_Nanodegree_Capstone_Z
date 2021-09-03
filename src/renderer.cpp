@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include <alsa/asoundlib.h>
 #include <iostream>
 #include <string>
 
@@ -12,7 +13,7 @@ Renderer::Renderer( const int screen_width,
                   grid_height( grid_height)
 {
   // initialize SDL
-  if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) std::cerr << "SDL could not initialize. SDL Error: \n" << SDL_GetError() << std::endl;
+  if( SDL_Init( SDL_INIT_VIDEO || SDL_INIT_AUDIO) < 0 ) std::cerr << "SDL could not initialize. SDL Error: \n" << SDL_GetError() << std::endl;
 
   // create the window
   _window = SDL_CreateWindow("Z", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screen_width, screen_height, SDL_WINDOW_SHOWN);
@@ -28,6 +29,28 @@ Renderer::Renderer( const int screen_width,
 
   // initialize the sdl2_ttf library for fonts
   if( TTF_Init() == -1 ) std::cerr << "SDL_ttf could not initialize! SDL_ttf Error:\n" << TTF_GetError() << std::endl;
+
+  // check for an audio card
+  int cardNum = -1;
+  int nextCard = snd_card_next(&cardNum);
+  int hasCard = snd_card_load(nextCard);
+  if ( !hasCard ) std::cout << "No audio card detected.\n";
+
+  //Initialize SDL_mixer
+  if ( hasCard && Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0 ) {
+    std::cerr << "Error: " << Mix_GetError() << std::endl;
+  }
+  else{
+    std::string musicPath = "../sound/upside-down-grin2.ogg";
+    std::string clickSoundPath = "../sound/click.wav";
+    
+    _gMusic = Mix_LoadMUS( musicPath.c_str() );
+    if ( _gMusic == NULL ) std::cerr << musicPath << " : Failed to load. "<< Mix_GetError() << std::endl;
+
+    _clickSound = Mix_LoadWAV( clickSoundPath.c_str() );
+    if ( _gMusic == NULL ) std::cerr << clickSoundPath << " : Failed to load. "<< Mix_GetError() << std::endl;
+  }
+
 }
 
 Renderer::~Renderer()
@@ -42,6 +65,23 @@ Renderer::~Renderer()
   SDL_Quit();
   IMG_Quit();
   TTF_Quit();
+
+  // free audio
+  Mix_FreeChunk( _clickSound );
+  Mix_FreeMusic( _gMusic );
+  _clickSound = NULL;
+  _gMusic = NULL;
+
+  // free ALSA memory
+  snd_config_update_free_global();
+}
+
+void Renderer::playMusic(){
+  if ( Mix_PlayingMusic() == 0) Mix_PlayMusic( _gMusic, -1 );
+}
+
+void Renderer::playClickSound(){
+   Mix_PlayChannel(-1, _clickSound, 0 );
 }
 
 void Renderer::renderAll( std::vector<std::shared_ptr<Building>>& buildings, GameStatsDisplay& stats, std::vector<Button>& buttons, Player& player )
@@ -83,6 +123,7 @@ void Renderer::renderAll( std::vector<std::shared_ptr<Building>>& buildings, Gam
 
 void Renderer::renderAll( std::vector<Button>& buttons, TextDisplay &textDisplay, LTexture &img )
 {
+
   // clear the screen
   SDL_SetRenderDrawColor( _renderer, 0x00, 0x00, 0x00, 0x00 );
   SDL_RenderClear( _renderer );

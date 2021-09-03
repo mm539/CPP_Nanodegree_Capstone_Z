@@ -64,7 +64,12 @@ enum ButtonState
 std::string getImagePath(ButtonType type);
 
 
-/********* 4. classes  *********/
+/********* 4. classes and structs *********/
+
+struct FButtonInfo{
+  ButtonType _buttonType;
+  bool _clicked {false};
+};
 
 class Button
 {

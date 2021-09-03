@@ -42,9 +42,14 @@ void Game::Run( Controller const &controller,
     frame_start = SDL_GetTicks();
 
     // INPUT, UPDATE, RENDER
-    controller.handleEvent( status.running, _buildings, _buttons, _clickedButtonType, _clickedBuilding );
+    controller.handleEvent( status.running, _buildings, _buttons, _clickedButtonInfo, _clickedBuilding );
     update( status );
-    renderer.renderAll( _buildings, _gameStatsDisplay, _buttons, _player ); 
+    renderer.renderAll( _buildings, _gameStatsDisplay, _buttons, _player );
+    renderer.playMusic();
+    if (_clickedButtonInfo._clicked == true){
+      _clickedButtonInfo._clicked = false;
+      renderer.playClickSound();
+    }
 
     frame_end = SDL_GetTicks();
 
@@ -175,7 +180,7 @@ void Game::makePlayer()
 void Game::update( Status &status )
 {
   updateButtons(); // sets which buttons are visible, invisible, clickable according to 1. location of player 2. building clicked on
-  buttonAction(); // performs the action set in _clickedButtonType
+  buttonAction(); // performs the action set in _clickedButtonInfo
   updateGSD();
  
   // if player is at home and has supplies, transfer those materials to the base
@@ -220,7 +225,7 @@ void Game::update( Status &status )
 
 void Game::buttonAction()
 {
-  switch ( _clickedButtonType )
+  switch ( _clickedButtonInfo._buttonType )
   {
   case ButtonType::REST:
     _actionResultText = _gameTime.getActionMsg( " Rested for an hour. ");
@@ -286,7 +291,7 @@ void Game::buttonAction()
   default:
     break;
   }
-  _clickedButtonType = ButtonType::BNULL;
+  _clickedButtonInfo._buttonType = ButtonType::BNULL;
 }
 
 

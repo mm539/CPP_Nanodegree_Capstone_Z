@@ -23,10 +23,11 @@ void Screen::Run( Controller const &controller,
     }
     frame_start = SDL_GetTicks();
 
-    // INPUTE UPDATE RENDER
-    controller.handleEvent( status.running, _buttons, _clickedButtonType );
+    // INPUT UPDATE RENDER
+    controller.handleEvent( status.running, _buttons, _clickedButtonInfo );
     update( status );
     childRender( renderer );// renderer.renderAll( _buttons, _title );
+    renderer.playMusic();
 
     status._mutex.unlock();
     
@@ -95,6 +96,10 @@ void CreditScreen::makeButtons()
 
 void MainMenu::childRender( Renderer &renderer ){
   renderer.renderAll( _buttons, _msg, _backgroundImg );
+  if (_clickedButtonInfo._clicked == true){
+    _clickedButtonInfo._clicked = false;
+    renderer.playClickSound();
+  }
 }
 
 void LoadingScreen::childRender( Renderer &renderer ){
@@ -115,7 +120,7 @@ void MainMenu::updateButtons()
 
 void MainMenu::buttonAction( Status &status)
 {
-  switch( _clickedButtonType )
+  switch( _clickedButtonInfo._buttonType )
   {
     case ButtonType::START:
       status.screen = EScreen::INITIAL_LOAD;
@@ -127,7 +132,7 @@ void MainMenu::buttonAction( Status &status)
     default:
       break;
   }
-  _clickedButtonType = ButtonType::BNULL;
+  _clickedButtonInfo._buttonType = ButtonType::BNULL;
 }
 
 void LoadingScreen::updateButtons()

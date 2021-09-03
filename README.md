@@ -7,8 +7,11 @@ This is my capstone project for the Udacity C++ Nanodegree program I took in 202
   * Linux: make is installed by default on most Linux distros
   * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
   * Windows: [Click here for installation instructions](http://gnuwin32.sourceforge.net/packages/make.htm)
-* SDL2 >= 2.0, SDL_TTF, SDL_Image
+* SDL2 >= 2.0, SDL_TTF, SDL_Image, SDL_Mixer
   * All installation instructions can be found [here](https://wiki.libsdl.org/Installation)
+  * Note that for Linux, an `apt` or `apt-get` installation is preferred to building from source.
+* ALSA
+  * https://www.alsa-project.org/wiki/Main_Page
   * Note that for Linux, an `apt` or `apt-get` installation is preferred to building from source.
 * gcc/g++ >= 5.4
   * Linux: gcc / g++ is installed by default on most Linux distros
@@ -17,7 +20,7 @@ This is my capstone project for the Udacity C++ Nanodegree program I took in 202
 
 I was only able to build this project on Windows Subsystem for Linux (WSL).
 
-I was never able to run this project on Windows because of problems with dependencies and making a proper CMakeLists.txt file. 
+I was never able to run this project on Windows because of problems with dependencies. 
 
 I never tried to run this project on Mac.
 

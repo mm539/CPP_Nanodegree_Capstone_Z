@@ -35,7 +35,7 @@ class Screen
   virtual void buttonAction( Status &status) = 0;
 
   std::vector<Button> _buttons;
-  ButtonType _clickedButtonType;
+  FButtonInfo _clickedButtonInfo;
 
   LTexture _backgroundImg;
   TextDisplay _msg;

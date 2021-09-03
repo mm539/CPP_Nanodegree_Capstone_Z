@@ -79,7 +79,7 @@ class Game
   std::vector<std::shared_ptr<Building>> _buildings;
   std::vector<Button> _buttons;
 
-  ButtonType _clickedButtonType; // the most recently clicked button
+  FButtonInfo _clickedButtonInfo; // the most recently clicked button
   std::shared_ptr<Building> _clickedBuilding;
   GameTime _gameTime; // game time. hours, minutes
   int _homeID; // the id of the home building
