@@ -81,5 +81,4 @@ As a starting point for this project, I looked at the Udacity Snake Game and kep
 
 To learn how to use the SDL library, I looked at the SDL tutorials from Lazy Foo. His tutorials are pure quality and far superior to anything else I could find.
 
-I used a font called BlackCapsRegular-wgA2. It's licensed under the CC Attribution license. Per the license, I must provide the name of its designer, G369.
-https://www.fontspace.com/black-caps-font-f11717
+I made a few visual assets (simple paint drawings). I downloaded some visual and audio assets. I downloaded a font. They were all in the public domain.
