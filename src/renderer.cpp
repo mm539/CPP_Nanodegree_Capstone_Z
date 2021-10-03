@@ -37,8 +37,8 @@ Renderer::Renderer( const int screen_width,
   if ( !hasCard ) std::cout << "No audio card detected.\n";
 
   //Initialize SDL_mixer
-  if ( hasCard && Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0 ) {
-    std::cerr << "Error: " << Mix_GetError() << std::endl;
+  if ( !hasCard || ( Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) ) {
+    std::cerr << "Mix_OpenAudio Error: " << Mix_GetError() << std::endl;
   }
   else{
     std::string musicPath = "../sound/upside-down-grin2.ogg";
